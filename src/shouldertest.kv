@@ -5,40 +5,55 @@
     BoxLayout:
         orientation: "vertical"
 
-        FloatLayout:
+        RelativeLayout:
+            size_hint: (1, 10)
+           
             Label:
                 text: 'Here are steps'
-
+                   
         BoxLayout:
             orientation: "horizontal"
 
             Button:
                 text: 'Back'
-
+                
             Button:
                 text: 'Next'
 
     BoxLayout:
         orientation: 'vertical'
 
-        FloatLayout:
+        
+        RelativeLayout:
+            size_hint: (1, 5)
+           
             Label:
                 text: 'graph'
-         
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            
+            TextInput:
+                id: my_textinput
+                font_size: 30
+                text: 'Input a value'
+            
+            Button:
+                id: start_stop
+                text: 'Start'
+                size_hint: 0.5, 1
+                on_press: root.measure()
+
         BoxLayout:
             orientation: 'horizontal'
 
             Button:
-                text: 'Start'
+                id: redo
+                text: 'Redo'
+                on_press: root.redo()
+                disabled: True
 
-            BoxLayout:
-                orientation: 'vertical'
-                
-                TextInput:
-                    id: my_textinput
-                    font_size: 50
-                    size_hint_y: None
-                    text: 'default'
-
-                Button:
-                    text: 'Redo'
+            Button:
+                id: validate
+                text: 'Validate'
+                disabled: True
