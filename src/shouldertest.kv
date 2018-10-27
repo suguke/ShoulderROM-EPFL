@@ -1,0 +1,44 @@
+#:kivy 1.0.9
+
+<ShoulderWindow>:
+    orientation: 'horizontal'
+    BoxLayout:
+        orientation: "vertical"
+
+        FloatLayout:
+            Label:
+                text: 'Here are steps'
+
+        BoxLayout:
+            orientation: "horizontal"
+
+            Button:
+                text: 'Back'
+
+            Button:
+                text: 'Next'
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        FloatLayout:
+            Label:
+                text: 'graph'
+         
+        BoxLayout:
+            orientation: 'horizontal'
+
+            Button:
+                text: 'Start'
+
+            BoxLayout:
+                orientation: 'vertical'
+                
+                TextInput:
+                    id: my_textinput
+                    font_size: 50
+                    size_hint_y: None
+                    text: 'default'
+
+                Button:
+                    text: 'Redo'
