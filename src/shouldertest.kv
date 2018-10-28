@@ -1,5 +1,49 @@
 #:kivy 1.0.9
 
+<Protocol>:
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Flexion :'
+
+        Label:
+            id: flexion
+            text: ''
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Abduction :'
+        
+        Label:
+            id: abduction
+            text: ''
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'External Rotation :'
+
+        Label:
+            id: ext_rot
+            text: ''
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Internal Rotation :'
+
+        Label:
+            id: int_rot
+            text: ''
+
 <ShoulderWindow>:
     orientation: 'horizontal'
     BoxLayout:
@@ -7,42 +51,64 @@
 
         RelativeLayout:
             size_hint: (1, 10)
-           
-            Label:
-                text: 'Here are steps'
+
+            Protocol:
+                id: table
                    
         BoxLayout:
             orientation: "horizontal"
 
             Button:
+                id: back
                 text: 'Back'
+                on_press: root.update_state('back')
+                disabled: True
                 
             Button:
+                id: next
                 text: 'Next'
+                on_press: root.update_state('next')
 
     BoxLayout:
         orientation: 'vertical'
 
         
-        RelativeLayout:
-            size_hint: (1, 5)
-           
-            Label:
-                text: 'graph'
-        
+        Label:
+            id: step_label
+            text: 'This is a step label.'
+  
+        Label:
+            id: angle_label
+            text: 'Angle : '
+            
+        Label:
+            id: state_label
+            text: 'State label'
+
+        Button:
+            id: start_stop
+            text: 'Start'
+            size_hint: 1, 1
+            on_press: root.measure()
+
         BoxLayout:
             orientation: 'horizontal'
             
             TextInput:
-                id: my_textinput
+                id: overinput
                 font_size: 30
-                text: 'Input a value'
+                text: 'Overwrite'
+                disabled: True
+                on_text: root.overinput()
             
             Button:
-                id: start_stop
-                text: 'Start'
-                size_hint: 0.5, 1
-                on_press: root.measure()
+                id: overwrite
+                text:'Overwrite'
+                disabled: True
+                on_press: root.overwrite()
+                
+            
+           
 
         BoxLayout:
             orientation: 'horizontal'
@@ -57,3 +123,4 @@
                 id: validate
                 text: 'Validate'
                 disabled: True
+                on_press: root.validate()
