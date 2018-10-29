@@ -1,4 +1,4 @@
-#:kivy 1.0.9
+#:kivy 1.10.0
 
 <Protocol>:
     orientation: 'vertical'
@@ -9,9 +9,25 @@
         Label:
             text: 'Flexion :'
 
-        Label:
-            id: flexion
-            text: ''
+        BoxLayout:
+            orientation: 'vertical'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: flexion_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: flexion_right
+                    text: ''
 
     BoxLayout:
         orientation: 'horizontal'
@@ -19,9 +35,25 @@
         Label:
             text: 'Abduction :'
         
-        Label:
-            id: abduction
-            text: ''
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: abduction_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: abduction_right
+                    text: ''
 
     BoxLayout:
         orientation: 'horizontal'
@@ -29,9 +61,25 @@
         Label:
             text: 'External Rotation :'
 
-        Label:
-            id: ext_rot
-            text: ''
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: ext_rot_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: ext_rot_right
+                    text: ''
 
 
     BoxLayout:
@@ -40,9 +88,27 @@
         Label:
             text: 'Internal Rotation :'
 
-        Label:
-            id: int_rot
-            text: ''
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: int_rot_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: int_rot_right
+                    text: ''
+                    
+############################
 
 <ShoulderWindow>:
     orientation: 'horizontal'
@@ -77,10 +143,19 @@
             id: step_label
             text: 'This is a step label.'
   
-        Label:
-            id: angle_label
-            text: 'Angle : '
-            
+        BoxLayout:
+            orientation: 'horizontal'
+
+            Label:
+                id: angle_left
+                text: 'Left Arm Angle : '
+                size: self.texture_size
+
+            Label:
+                id: angle_right
+                text: 'Right Arm Angle : '
+                size: self.texture_size
+
         Label:
             id: state_label
             text: 'State label'
@@ -95,21 +170,21 @@
             orientation: 'horizontal'
             
             TextInput:
-                id: overinput
+                id: overinput_left
                 font_size: 30
-                text: 'Overwrite'
+                input_filter: 'int' 
                 disabled: True
-                on_text: root.overinput()
+                multiline: False
+                on_text_validate: root.overwriteLeft()
             
-            Button:
-                id: overwrite
-                text:'Overwrite'
+            TextInput:
+                id: overinput_right
+                font_size: 30
+                input_filter: 'int' 
                 disabled: True
-                on_press: root.overwrite()
+                multiline: False
+                on_text_validate: root.overwriteRight()
                 
-            
-           
-
         BoxLayout:
             orientation: 'horizontal'
 

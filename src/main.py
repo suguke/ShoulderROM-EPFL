@@ -8,7 +8,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
 import random
-import re
 
 class Protocol(BoxLayout):
     pass
@@ -28,40 +27,52 @@ class ShoulderWindow(BoxLayout):
     def update_state(self, direction):
         if direction == 'next':
             self.state += 1
-            self.ids.back.disabled = False
-            if self.state == 3:
-                self.ids.next.disabled = True
-            self.ids.start_stop.disabled = False
-            self.ids.step_label.text = self.state_list[self.state]                
+            self.ids.step_label.text = self.state_list[self.state]
             
         elif direction == 'back':
             self.state -= 1
-            self.ids.next.disabled = False
-            if self.state == 0:
-                self.ids.back.disabled = True
-            self.ids.start_stop.disabled = False   
             self.ids.step_label.text = self.state_list[self.state]                
              
-
         else:
             self.ids.state_label.text = 'Error'
+        
+        self.update_navigation()
+        self.ids.start_stop.disabled = False           
 
+    def update_navigation(self):
+        if self.state == 0:
+            self.ids.back.disabled = True
+            self.ids.next.disabled = False
+        elif self.state == 3:
+            self.ids.back.disabled = False
+            self.ids.next.disabled = True
+        else:
+            self.ids.back.disabled = False
+            self.ids.next.disabled = False
 
 
     def display_state(self,state):
         self.ids.state_label.text = state
 
-    def display_angle(self, angle):
-        self.ids.angle_label.text = 'Angle : ' + angle + ' degrees'
+    def display_angle_left(self, angle):
+        self.ids.angle_left.text = 'Left Arm Angle : ' + angle
+
+    def display_angle_right(self, angle):
+        self.ids.angle_right.text = 'Right Arm Angle : ' + angle
 
     def get_angle(self):
         #angle =  dummy_function()
-        self.display_angle(str(random.randint(0,180)))
+        angle_l = str(random.randint(0,180)) + '°'
+        angle_r = str(random.randint(0,180)) + '°'
+        self.display_angle_left(angle_l)
+        self.display_angle_right(angle_r)
 
     def measure(self):
         if self.ids.start_stop.text == 'Start':
             self.display_state('Measurement')
             self.ids.start_stop.text = 'Stop'
+            self.ids.back.disabled = True
+            self.ids.next.disabled = True
 
         elif self.ids.start_stop.text == 'Stop':
             self.display_state('Done')
@@ -70,68 +81,67 @@ class ShoulderWindow(BoxLayout):
             self.ids.start_stop.disabled = True
             self.ids.redo.disabled = False
             self.ids.validate.disabled = False
-            self.ids.overinput.disabled = False
+            self.ids.overinput_left.disabled = False
+            self.ids.overinput_right.disabled = False
         else:
             self.display_state('Error')
     
     def redo(self):
         self.display_state('Cleared')
+        self.display_angle_left('')
+        self.display_angle_right('')
         self.ids.start_stop.text = 'Start'
         self.ids.start_stop.disabled = False
         self.ids.redo.disabled = True
         self.ids.validate.disabled = True
-        self.ids.overwrite.disabled = True
-        self.ids.overinput.disabled = True
-        self.ids.overinput.text = 'Overwrite'
+        self.ids.overinput_left.disabled = True
+        self.ids.overinput_right.disabled = True
+        self.ids.next.disabled = True
+        self.ids.back.disabled = True
+        self.cleaninput()
 
-
-    def overinput(self):
-        if re.match('^[0-9]+$', self.ids.overinput.text):
-            self.ids.overwrite.disabled = False
-        else:
-            self.ids.overwrite.disabled = True
+    def overwriteLeft(self):
+        self.display_angle_left(self.ids.overinput_left.text + '°')
     
-    def overwrite(self):
-        self.display_angle(self.ids.overinput.text)
+    def overwriteRight(self):
+        self.display_angle_right(self.ids.overinput_right.text + '°')
+        
+    def cleaninput(self):
+        self.ids.overinput_left.text = ''
+        self.ids.overinput_right.text = ''      
 
     def validate(self):
         self.display_state('Validated')
         self.ids.redo.disabled = True
         self.ids.validate.disabled = True
-        self.ids.overwrite.disabled = True
-        self.ids.overinput.disabled = True
-        self.ids.overinput.text = 'Overwrite'
+        self.ids.overinput_left.disabled = True
+        self.ids.overinput_right.disabled = True
+        
 
         if self.state == 0:
-            self.ids.table.ids.flexion.text = self.ids.angle_label.text[8:-8]
+            self.ids.table.ids.flexion_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.flexion_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 1:
-            self.ids.table.ids.abduction.text = self.ids.angle_label.text[8:-8]
+            self.ids.table.ids.abduction_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.abduction_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 2:
-            self.ids.table.ids.ext_rot.text = self.ids.angle_label.text[8:-8]
+            self.ids.table.ids.ext_rot_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.ext_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 3:
-            self.ids.table.ids.int_rot.text = self.ids.angle_label.text[8:-8]
+            self.ids.table.ids.int_rot_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.int_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
         else: 
             self.ids.state_label.text == 'Error'
         
-        self.ids.angle_label.text = 'Angle :'
-
-
-
+        self.display_angle_left('')
+        self.display_angle_right('')
         
-
-        
-
-    
+        self.update_navigation()
+        self.cleaninput()
 
 class ShoulderTestApp(App):
     def build(self):
-
         return ShoulderWindow()
-
-    
-
-    
-
 
 if __name__ == '__main__':
     ShoulderTestApp().run()
