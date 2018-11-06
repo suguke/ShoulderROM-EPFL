@@ -20,6 +20,7 @@
                 Label:
                     id: flexion_left
                     text: ''
+                    
             BoxLayout:
                 orientation: 'horizontal'
                 Label:
@@ -107,95 +108,3 @@
                 Label:
                     id: int_rot_right
                     text: ''
-                    
-############################
-
-<ShoulderWindow>:
-    orientation: 'horizontal'
-    BoxLayout:
-        orientation: "vertical"
-
-        RelativeLayout:
-            size_hint: (1, 10)
-
-            Protocol:
-                id: table
-                   
-        BoxLayout:
-            orientation: "horizontal"
-
-            Button:
-                id: back
-                text: 'Back'
-                on_press: root.update_state('back')
-                disabled: True
-                
-            Button:
-                id: next
-                text: 'Next'
-                on_press: root.update_state('next')
-
-    BoxLayout:
-        orientation: 'vertical'
-
-        
-        Label:
-            id: step_label
-            text: 'This is a step label.'
-  
-        BoxLayout:
-            orientation: 'horizontal'
-
-            Label:
-                id: angle_left
-                text: 'Left Arm Angle : '
-                size: self.texture_size
-
-            Label:
-                id: angle_right
-                text: 'Right Arm Angle : '
-                size: self.texture_size
-
-        Label:
-            id: state_label
-            text: 'State label'
-
-        Button:
-            id: start_stop
-            text: 'Start'
-            size_hint: 1, 1
-            on_press: root.measure()
-
-        BoxLayout:
-            orientation: 'horizontal'
-            
-            TextInput:
-                id: overinput_left
-                font_size: 30
-                input_filter: 'int' 
-                disabled: True
-                multiline: False
-                on_text_validate: root.overwriteLeft()
-            
-            TextInput:
-                id: overinput_right
-                font_size: 30
-                input_filter: 'int' 
-                disabled: True
-                multiline: False
-                on_text_validate: root.overwriteRight()
-                
-        BoxLayout:
-            orientation: 'horizontal'
-
-            Button:
-                id: redo
-                text: 'Redo'
-                on_press: root.redo()
-                disabled: True
-
-            Button:
-                id: validate
-                text: 'Validate'
-                disabled: True
-                on_press: root.validate()

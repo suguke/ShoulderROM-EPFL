@@ -1,0 +1,40 @@
+#:kivy 1.10.0
+
+<ScreenResult>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        RelativeLayout:
+            size_hint: (1, 10)
+
+            Protocol:
+                id: result
+
+        Label:
+            id: score
+            text: 'Score : ' + root.manager.score()
+
+        BoxLayout:
+            orientation: 'horizontal'
+
+            AnchorLayout:
+                anchor_x: 'left'
+                anchor_y: 'bottom'
+
+                Button:
+                    id: back
+                    size_hint: None, 1
+                    width: self.texture_size[0] * 1.2
+                    text: 'Retour aux mesures'
+                    on_press: root.manager.current = 'Measurement Screen'
+
+            AnchorLayout:
+                anchor_x: 'right'
+                anchor_y: 'bottom'
+                size_hint: None, 1
+
+                Button:
+                    size_hint: None, 1
+                    width: root.ids.back.width
+                    text: 'Save'
+                    on_press: root.manager.save()
