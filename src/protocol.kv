@@ -1,0 +1,110 @@
+#:kivy 1.10.0
+
+<Protocol>:
+    orientation: 'vertical'
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Flexion :'
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: flexion_left
+                    text: ''
+                    
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: flexion_right
+                    text: ''
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Abduction :'
+        
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: abduction_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: abduction_right
+                    text: ''
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'External Rotation :'
+
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: ext_rot_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: ext_rot_right
+                    text: ''
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            text: 'Internal Rotation :'
+
+        BoxLayout:
+            orientation: 'vertical'
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Left : '
+
+                Label:
+                    id: int_rot_left
+                    text: ''
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    text: 'Right : '
+
+                Label:
+                    id: int_rot_right
+                    text: ''

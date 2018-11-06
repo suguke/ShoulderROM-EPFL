@@ -1,0 +1,44 @@
+#:kivy 1.10.0
+
+<ScreenQuestions>:
+    BoxLayout:
+        orientation: 'vertical'
+
+        TabbedPanel:
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            do_default_tab: False
+
+            TabbedPanelItem:
+                text: 'Douleurs'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        size_hint: None,1
+                        width: self.texture_size[0] *1.1
+                        text: 'Quelle est l intensite de vos douleurs de l epaule lors d activite ordinaire les dernieres 24h ?'
+                    Spinner:
+                        text: 'Reponse'
+                        values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+            TabbedPanelItem:
+                text: 'tab2'
+                BoxLayout:
+                    Label:
+                        text: 'Second tab content area'
+                    Button:
+                        text: 'Button that does nothing'
+            TabbedPanelItem:
+                text: 'tab3'
+                RstDocument:
+                    text:
+                        '\\n'.join(("Hello world", "-----------",
+                        "You are in the third tab."))
+        BoxLayout:
+            orientation: 'horizontal'
+
+            Button:
+                text: 'Retour'
+                on_press: root.manager.current = 'Patient Screen'
+
+            Button:
+                text: 'Suite'
+                on_press: root.manager.current = 'Measurement Screen'

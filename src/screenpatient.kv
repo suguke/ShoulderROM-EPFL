@@ -1,0 +1,21 @@
+#:kivy 1.10.0
+
+<ScreenPatient>:
+    FloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: .3, .3
+            pos_hint: {'center_x': .5, 'center_y': .5}
+
+            TextInput:
+                id: patient_code
+                text: 'Patient code'
+                font_size: 30
+                input_filter: 'int' 
+                multiline: False
+                on_text_validate: root.set_patient()
+
+            Button:
+                id: go
+                text: 'Commencer'
+                on_press: root.manager.current = 'Questions Screen'
