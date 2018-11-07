@@ -5,40 +5,111 @@
         orientation: 'vertical'
 
         TabbedPanel:
+            size_hint: 1, 10
             pos_hint: {'center_x': .5, 'center_y': .5}
             do_default_tab: False
 
             TabbedPanelItem:
                 text: 'Douleurs'
                 BoxLayout:
-                    orientation: 'horizontal'
-                    Label:
-                        size_hint: None,1
-                        width: self.texture_size[0] *1.1
-                        text: 'Quelle est l intensite de vos douleurs de l epaule lors d activite ordinaire les dernieres 24h ?'
-                    Spinner:
-                        text: 'Reponse'
-                        values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+                    orientation: 'vertical'
+                    RelativeLayout:
+                        TextInput:
+                            size_hint: 1, 0.5
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            text: 'Quelle est l intensite de vos douleurs de l epaule lors d activite ordinaire les dernieres 24h ?'
+                            disabled: True
+                            readonly: True
+                            font_color: [1, 1, 1, 1]
+                            background_color: [0, 0, 0, 0.5]
+                            disabled_foreground_color: [1, 1, 1, 1]
+                        Spinner:
+                            id: list
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.25}
+                            text: 'Reponse'
+                            values: ('Aucune', 'Legere', 'Moderee', 'Severe')
             TabbedPanelItem:
-                text: 'tab2'
+                text: 'Activite 1'
                 BoxLayout:
-                    Label:
-                        text: 'Second tab content area'
-                    Button:
-                        text: 'Button that does nothing'
+                    orientation: 'vertical'
+                    RelativeLayout:
+                        TextInput:
+                            size_hint: 1, 0.5
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            text: 'Quel est l impact de votre probleme d epaule sur votre activite professionnelle ? Si vous n etes pas actif professionnellement, quel est l impact sur votre activite quotidienne ?'
+                            disabled: True
+                            readonly: True
+                            font_color: [1, 1, 1, 1]
+                            background_color: [0, 0, 0, 0.5]
+                            disabled_foreground_color: [1, 1, 1, 1]
+                        Spinner:
+                            id: list
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.25}
+                            text: 'Reponse'
+                            values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
             TabbedPanelItem:
-                text: 'tab3'
-                RstDocument:
-                    text:
-                        '\\n'.join(("Hello world", "-----------",
-                        "You are in the third tab."))
+                text: 'Activite 2'
+                BoxLayout:
+                    orientation: 'vertical'
+                    RelativeLayout:
+                        TextInput:
+                            size_hint: 1, 0.5
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            text: 'Quel est l impact de votre probleme d epaule sur votre activite de loisir (sport, jardinage, bricolage musique, …)?'
+                            disabled: True
+                            readonly: True
+                            font_color: [1, 1, 1, 1]
+                            background_color: [0, 0, 0, 0.5]
+                            disabled_foreground_color: [1, 1, 1, 1]
+                        Spinner:
+                            id: list
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.25}
+                            text: 'Reponse'
+                            values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+            TabbedPanelItem:
+                text: 'Activite 3'
+                BoxLayout:
+                    orientation: 'vertical'
+                    RelativeLayout:
+                        TextInput:
+                            size_hint: 1, 0.5
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            text: 'Est-ce que votre sommeil est perturbe par votre probleme d epaule ?'
+                            disabled: True
+                            readonly: True
+                            font_color: [1, 1, 1, 1]
+                            background_color: [0, 0, 0, 0.5]
+                            disabled_foreground_color: [1, 1, 1, 1]
+                        Spinner:
+                            id: list
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.25}
+                            text: 'Reponse'
+                            values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
         BoxLayout:
             orientation: 'horizontal'
 
-            Button:
-                text: 'Retour'
-                on_press: root.manager.current = 'Patient Screen'
+            AnchorLayout:
+                anchor_x: 'left'
+                anchor_y: 'bottom'
 
-            Button:
-                text: 'Suite'
-                on_press: root.manager.current = 'Measurement Screen'
+                Button:
+                    id: back
+                    size_hint: None, 1
+                    width: self.texture_size[0] * 1.5
+                    text: 'Retour accueil'
+                    on_press: root.manager.current = 'Patient Screen'
+
+            AnchorLayout:
+                anchor_x: 'right'
+                anchor_y: 'bottom'
+                size_hint: None, 1
+
+                Button:
+                    size_hint: None, 1
+                    width: root.ids.back.width
+                    text: 'Suite'
+                    on_press: root.manager.current = 'Measurement Screen'
