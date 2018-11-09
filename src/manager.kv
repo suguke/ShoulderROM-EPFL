@@ -17,12 +17,13 @@
         id: screen_questions
         name: 'Questions Screen'
         manager: screen_manager
+        on_pre_leave: root.set_store_questions()
 
     ScreenMeasure:
         id: screen_measure
         name: 'Measurement Screen'
         manager: screen_manager
-        on_pre_leave: root.set_store()
+        on_pre_leave: root.set_store_measures()
 
     ScreenResult:
         id: screen_result

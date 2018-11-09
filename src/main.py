@@ -29,16 +29,42 @@ class Protocol(BoxLayout):
     pass
 
 class ScreenPatient(Screen):
+    p_id = False
+    c_id = False
     
     def set_patient(self):
         id = self.ids.patient_code.text
-        if id.isdigit():
-            self.manager.set_patient(self.ids.patient_code.text)
+        if id.isdigit() and len(id) == 7:
+            self.p_id = self.manager.set_patient(self.ids.patient_code.text)
         else:
-            self.ids.patient_code.text = 'Invalide input'
+            self.ids.patient_code.text = 'Invalide input: 7 digits'
+            self.p_id = False
+        self.disable_button()
+        
+
+    def set_consultation(self):
+        id = self.ids.consultation_code.text
+        if id.isdigit() and len(id) == 8:
+            self.c_id = self.manager.set_consultation(self.ids.consultation_code.text)
+        else:
+            self.ids.consultation_code.text = 'Invalide input: 8 digits'
+            self.c_id = False
+        self.disable_button()
+    
+    def disable_button(self):
+        if self.p_id and self.c_id:
+            self.ids.go.disabled = False
+        else:
+            self.ids.go.disabled = True
+    
+    def validate(self):
+        self.manager.current = 'Questions Screen'
 
 class ScreenQuestions(Screen):
-    pass
+         
+    def validate(self):
+        self.manager.set_store_questions()
+        self.manager.current = 'Measurement Screen'
 
 
 class ScreenMeasure(Screen):
@@ -182,31 +208,220 @@ class Manager(ScreenManager):
     screen_result = ObjectProperty(None)
     data_dic = {}
     patient_id = ''
+    consultation_id = ''
 
-    def set_store(self):
-        self.data_dic['Flexion, Left Arm'] = self.screen_measure.ids.table.ids.flexion_left.text
-        self.data_dic['Flexion, Right Arm'] = self.screen_measure.ids.table.ids.flexion_right.text
-        self.data_dic['Abduction, Left Arm'] = self.screen_measure.ids.table.ids.abduction_left.text
-        self.data_dic['Abduction, Right Arm'] = self.screen_measure.ids.table.ids.abduction_right.text
-        self.data_dic['External Rotation, Left Arm'] = self.screen_measure.ids.table.ids.ext_rot_left.text
-        self.data_dic['External Rotation, Right Arm'] = self.screen_measure.ids.table.ids.ext_rot_right.text
-        self.data_dic['Internal Rotation Left Arm'] = self.screen_measure.ids.table.ids.int_rot_left.text
-        self.data_dic['Internal Rotation Right Arm'] = self.screen_measure.ids.table.ids.int_rot_right.text
+    def set_store_questions(self):
+        self.data_dic['Pain, Left Arm'] = self.screen_questions.ids.list1_l.text
+        self.data_dic['Pain, Right Arm'] = self.screen_questions.ids.list1_r.text
+        self.data_dic['Activity 1, Left Arm'] = self.screen_questions.ids.list2_l.text
+        self.data_dic['Activity 1, Right Arm'] = self.screen_questions.ids.list2_r.text
+        self.data_dic['Activity 2, Left Arm'] = self.screen_questions.ids.list3_l.text
+        self.data_dic['Activity 2, Right Arm'] = self.screen_questions.ids.list3_r.text
+        self.data_dic['Activity 3, Left Arm'] = self.screen_questions.ids.list4_l.text
+        self.data_dic['Activity 3, Right Arm'] = self.screen_questions.ids.list4_r.text
+        self.data_dic['Activity 4, Left Arm'] = self.screen_questions.ids.list5_l.text
+        self.data_dic['Activity 4, Right Arm'] = self.screen_questions.ids.list5_r.text
+
+    def set_store_measures(self):
+        self.data_dic['Flexion, Left Arm'] = \
+            self.screen_measure.ids.table.ids.flexion_left.text[:-1]
+        self.data_dic['Flexion, Right Arm'] = \
+            self.screen_measure.ids.table.ids.flexion_right.text[:-1]
+        self.data_dic['Abduction, Left Arm'] = \
+            self.screen_measure.ids.table.ids.abduction_left.text[:-1]
+        self.data_dic['Abduction, Right Arm'] = \
+            self.screen_measure.ids.table.ids.abduction_right.text[:-1]
+        self.data_dic['External Rotation, Left Arm'] = \
+            self.screen_measure.ids.table.ids.ext_rot_left.text[:-1]
+        self.data_dic['External Rotation, Right Arm'] = \
+            self.screen_measure.ids.table.ids.ext_rot_right.text[:-1]
+        self.data_dic['Internal Rotation, Left Arm'] = \
+            self.screen_measure.ids.table.ids.int_rot_left.text[:-1]
+        self.data_dic['Internal Rotation, Right Arm'] = \
+            self.screen_measure.ids.table.ids.int_rot_right.text[:-1]
     
+    def set_store(self):
+        self.set_store_measures()
+        self.set_store_questions()
+
     def get_store(self):
-        self.screen_result.ids.result.ids.flexion_left.text = self.data_dic.get('Flexion, Left Arm', 'Not found')
-        self.screen_result.ids.result.ids.flexion_right.text = self.data_dic.get('Flexion, Right Arm', 'Not found')
-        self.screen_result.ids.result.ids.abduction_left.text = self.data_dic.get('Abduction, Left Arm', 'Not found')
-        self.screen_result.ids.result.ids.abduction_right.text = self.data_dic.get('Abduction, Right Arm', 'Not found')
-        self.screen_result.ids.result.ids.ext_rot_left.text = self.data_dic.get('External Rotation, Left Arm', 'Not found')
-        self.screen_result.ids.result.ids.ext_rot_right.text = self.data_dic.get('External Rotation, Right Arm', 'Not found')
-        self.screen_result.ids.result.ids.int_rot_left.text = self.data_dic.get('Internal Rotation Left Arm', 'Not found')
-        self.screen_result.ids.result.ids.int_rot_right.text = self.data_dic.get('Internal Rotation Right Arm', 'Not found') 
+        self.screen_result.ids.result.ids.flexion_left.text = \
+            self.data_dic.get('Flexion, Left Arm', 'Not found')
+        self.screen_result.ids.result.ids.flexion_right.text = \
+            self.data_dic.get('Flexion, Right Arm', 'Not found')
+        self.screen_result.ids.result.ids.abduction_left.text = \
+            self.data_dic.get('Abduction, Left Arm', 'Not found')
+        self.screen_result.ids.result.ids.abduction_right.text = \
+            self.data_dic.get('Abduction, Right Arm', 'Not found')
+        self.screen_result.ids.result.ids.ext_rot_left.text = \
+            self.data_dic.get('External Rotation, Left Arm', 'Not found')
+        self.screen_result.ids.result.ids.ext_rot_right.text = \
+            self.data_dic.get('External Rotation, Right Arm', 'Not found')
+        self.screen_result.ids.result.ids.int_rot_left.text = \
+            self.data_dic.get('Internal Rotation, Left Arm', 'Not found')
+        self.screen_result.ids.result.ids.int_rot_right.text = \
+            self.data_dic.get('Internal Rotation, Right Arm', 'Not found') 
+        self.score()
 
     def score(self):
-        score_value = str(random.randint(0, 100)) + '%'
-        self.data_dic['Score'] = score_value
-        return score_value
+        score_left = self.get_score_questions ('Left')
+        score_right = self.get_score_questions('Right')
+        score_diff = abs(score_left - score_right)
+
+        self.data_dic['Score Left'] = score_left
+        self.data_dic['Score Right'] = score_right
+        self.screen_result.ids.left.text = str(score_left)
+        self.screen_result.ids.right.text = str(score_right)
+        self.screen_result.ids.diff.text = str(score_diff)
+
+    def get_score_questions(self, side):
+        score = 0
+        q = self.data_dic.get('Pain, ' + side + ' Arm')
+
+        if q == 'Aucune':
+            score += 15
+        elif q == 'Legere':
+            score += 10
+        elif q == 'Moderee':
+            score += 5
+        elif q == 'Severe':
+            score += 0
+        else:
+            score += 999
+
+        q = self.data_dic.get('Activity 1, ' + side + ' Arm')
+
+        if q == 'Aucune':
+            score += 4
+        elif q == 'Legere':
+            score += 3
+        elif q == 'Moderee':
+            score += 2
+        elif q == 'Severe':
+            score += 1
+        elif q == 'Impossible':
+            score += 0
+        else:
+            score += 999
+        
+        q = self.data_dic.get('Activity 2, ' + side + ' Arm')
+
+        if q == 'Aucune':
+            score += 4
+        elif q == 'Legere':
+            score += 3
+        elif q == 'Moderee':
+            score += 2
+        elif q == 'Severe':
+            score += 1
+        elif q == 'Impossible':
+            score += 0
+        else:
+            score += 999
+        
+        q = self.data_dic.get('Activity 3, ' + side + ' Arm')
+
+        if q == 'Jamais':
+            score += 2
+        elif q == 'Occasionnellement':
+            score += 1
+        elif q == 'Toutes les nuits':
+            score += 0
+        else:
+            score += 999
+
+        q = self.data_dic.get('Activity 4, ' + side + ' Arm')
+
+        if q == 'Au-dessus de la tete':
+            score += 10
+        elif q == 'Tete':
+            score += 8
+        elif q == 'Cou':
+            score += 6
+        elif q == 'Xiphoide':
+            score += 4
+        elif q == 'Taille':
+            score += 2
+        else:
+            score += 999
+
+        q = int(self.data_dic.get('Flexion, ' + side + ' Arm'))
+
+        if q < 0:
+            score += 999
+        elif q <= 30:
+            score += 0
+        elif q <= 60:
+            score += 2
+        elif q <= 90:
+            score += 4
+        elif q <= 120:
+            score += 6
+        elif q <= 150:
+            score += 8
+        elif q > 150:
+            score += 10
+        else: 
+            score += 999
+
+        q = int(self.data_dic.get('Abduction, ' + side + ' Arm'))
+
+        if q < 0:
+            score += 999
+        elif q <= 30:
+            score += 0
+        elif q <= 60:
+            score += 2
+        elif q <= 90:
+            score += 4
+        elif q <= 120:
+            score += 6
+        elif q <= 150:
+            score += 8
+        elif q > 150:
+            score += 10
+        else: 
+            score += 999
+
+        q = int(self.data_dic.get('External Rotation, ' + side + ' Arm'))
+
+        if q < 0:
+            score += 999
+        elif q <= 15:
+            score += 0
+        elif q <= 30:
+            score += 2
+        elif q <= 45:
+            score += 4
+        elif q <= 60:
+            score += 6
+        elif q <= 75:
+            score += 8
+        elif q > 75:
+            score += 10
+        else: 
+            score += 999
+
+        q = int(self.data_dic.get('Internal Rotation, ' + side + ' Arm'))
+
+        if q < 0:
+            score += 999
+        elif q <= 15:
+            score += 0
+        elif q <= 30:
+            score += 2
+        elif q <= 45:
+            score += 4
+        elif q <= 60:
+            score += 6
+        elif q <= 75:
+            score += 8
+        elif q > 75:
+            score += 10
+        else: 
+            score += 999
+
+        return score
 
     def save(self):
 
@@ -217,6 +432,11 @@ class Manager(ScreenManager):
 
     def set_patient(self, id):
         self.patient_id = id
+        return True
+
+    def set_consultation(self, id):
+        self.consultation_id = id
+        return True
 
 
 class ShoulderTestApp(App):

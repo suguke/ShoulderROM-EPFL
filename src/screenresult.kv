@@ -12,8 +12,38 @@
 
         Label:
             id: score
-            text: 'Score : ' + root.manager.score()
+            text: 'Score : ' 
+        
+        BoxLayout:
+            orientation: 'vertical'
 
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Label:
+                    text: 'Gauche :' 
+
+                Label:
+                    text: 'Diff :'
+
+                Label:
+                    text: 'Droite :'
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Label:
+                    id: left
+                    text: '' 
+
+                Label:
+                    id: diff
+                    text: ''  
+
+                Label:
+                    id: right
+                    text: ''
+                    
         BoxLayout:
             orientation: 'horizontal'
 

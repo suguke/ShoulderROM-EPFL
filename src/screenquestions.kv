@@ -23,12 +23,26 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
-                        Spinner:
-                            id: list
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            Label:
+                                text: 'Bras Gauche'
+                            Label:
+                                text: 'Bras Droit'
+                        BoxLayout:
+                            orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
-                            text: 'Reponse'
-                            values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+                            Spinner:
+                                id: list1_l
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+                            Spinner:
+                                id: list1_r
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe')
             TabbedPanelItem:
                 text: 'Activite 1'
                 BoxLayout:
@@ -43,12 +57,26 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
-                        Spinner:
-                            id: list
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            Label:
+                                text: 'Bras Gauche'
+                            Label:
+                                text: 'Bras Droit'
+                        BoxLayout:
+                            orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
-                            text: 'Reponse'
-                            values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                            Spinner:
+                                id: list2_l
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                            Spinner:
+                                id: list2_r
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
             TabbedPanelItem:
                 text: 'Activite 2'
                 BoxLayout:
@@ -57,18 +85,32 @@
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
-                            text: 'Quel est l impact de votre probleme d epaule sur votre activite de loisir (sport, jardinage, bricolage musique, …)?'
+                            text: 'Quel est l impact de votre probleme d epaule sur votre activite de loisir (sport, jardinage, bricolage musique, ...)?'
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
-                        Spinner:
-                            id: list
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            Label:
+                                text: 'Bras Gauche'
+                            Label:
+                                text: 'Bras Droit'
+                        BoxLayout:
+                            orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
-                            text: 'Reponse'
-                            values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                            Spinner:
+                                id: list3_l
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                            Spinner:
+                                id: list3_r
+                                text: 'Reponse'
+                                values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
             TabbedPanelItem:
                 text: 'Activite 3'
                 BoxLayout:
@@ -83,12 +125,60 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
-                        Spinner:
-                            id: list
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            Label:
+                                text: 'Bras Gauche'
+                            Label:
+                                text: 'Bras Droit'
+                        BoxLayout:
+                            orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
-                            text: 'Reponse'
-                            values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
+                            Spinner:
+                                id: list4_l
+                                text: 'Reponse'
+                                values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
+                            Spinner:
+                                id: list4_r
+                                text: 'Reponse'
+                                values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
+            TabbedPanelItem:
+                text: 'Activite 4'
+                BoxLayout:
+                    orientation: 'vertical'
+                    RelativeLayout:
+                        TextInput:
+                            size_hint: 1, 0.5
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            text: 'Hauteur d utilisation de la main sans douleurs d epaule'
+                            disabled: True
+                            readonly: True
+                            font_color: [1, 1, 1, 1]
+                            background_color: [0, 0, 0, 0.5]
+                            disabled_foreground_color: [1, 1, 1, 1]
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.5}
+                            Label:
+                                text: 'Bras Gauche'
+                            Label:
+                                text: 'Bras Droit'
+                        BoxLayout:
+                            orientation: 'horizontal'
+                            size_hint: 1, 0.25
+                            pos_hint: {'x': 0, 'y': 0.25}
+                            Spinner:
+                                id: list5_l
+                                text: 'Reponse'
+                                values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
+                            Spinner:
+                                id: list5_r
+                                text: 'Reponse'
+                                values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
         BoxLayout:
             orientation: 'horizontal'
 
@@ -112,4 +202,5 @@
                     size_hint: None, 1
                     width: root.ids.back.width
                     text: 'Suite'
-                    on_press: root.manager.current = 'Measurement Screen'
+                    on_press: root.validate()
+                    disabled: False if (root.ids.list1_l.text != 'Reponse' and root.ids.list1_r.text != 'Reponse' and root.ids.list2_l.text != 'Reponse' and root.ids.list2_r.text != 'Reponse' and root.ids.list3_l.text != 'Reponse' and root.ids.list3_r.text != 'Reponse' and root.ids.list4_l.text != 'Reponse' and root.ids.list4_r.text != 'Reponse' and root.ids.list5_l.text != 'Reponse' and root.ids.list5_r.text != 'Reponse') else True
