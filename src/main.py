@@ -102,13 +102,22 @@ class ScreenMeasure(Screen):
             self.ids.back.text = 'Retour aux questions'   
         elif self.state ==4:
             self.ids.next.text = 'Résultats'
+            if self.ids.table.ids.flexion_left.text == '' or \
+            self.ids.table.ids.flexion_right.text == '' or self.ids.table.ids.abduction_left.text == '' or\
+             self.ids.table.ids.abduction_right.text == '' or self.ids.table.ids.ext_rot_left.text == '' or\
+              self.ids.table.ids.ext_rot_right.text == '' or self.ids.table.ids.int_rot_left.text == '' or\
+               self.ids.table.ids.int_rot_right.text == '':
+                self.ids.next.disabled = True
         elif self.state == 5:
             self.state = 4
             self.set_state()
             self.manager.current = 'Results Screen'
         else:
             self.ids.next.text = 'Suivant'
-            self.ids.back.text = 'Précédant'
+            self.ids.back.text = 'Précédent'
+
+
+        
 
     def display_state(self,state):
         self.ids.state_label.text = state
@@ -441,6 +450,21 @@ class Manager(ScreenManager):
 
 class ShoulderTestApp(App):
     def build(self):
+        #### Temporary solution : custom Pandas dataframes
+        df_patients = pd.DataFrame(
+            {'patient_code': [1001111, 1001112, 1001113],
+             'consultation_list': [(10120010, 10120011, 10120012, 10120013), \
+             (10120021), (10120031, 10120032)]},
+        )
+        df_patients.set_index('patient_code', inplace=True)
+        df_consultations = pd.DataFrame(
+                { 'consultation_code' : [10120010, 10120011, 10120012, 10120013, \
+                10120021, 10120031, 10120032],
+                  'score_left': [10, 15, 13, 42, 37, 38, 28],
+                  'score_right': [40, 39,37,12,13,11,27]                    
+                })
+        df_consultations.set_index('consultation_code', inplace=True)
+        ####
         return Manager()
 
 if __name__ == '__main__':
