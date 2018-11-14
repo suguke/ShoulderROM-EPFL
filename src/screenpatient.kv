@@ -24,6 +24,7 @@
                     text: 'Consultation code'
                 TextInput:
                     id: consultation_code
+                    disabled: True
                     font_size: 30
                     input_filter: 'int' 
                     multiline: False
@@ -35,3 +36,9 @@
                 text: 'Commencer'
                 on_press: root.validate()
                 disabled: True
+            
+            # Button for kivy settings
+            # Button:
+            #     id: settings
+            #     text: 'Settings'
+            #     on_press: app.open_settings()

@@ -24,6 +24,7 @@ Builder.load_file('screenquestions.kv')
 
 import random
 import csv
+import pandas as pd
 
 class Protocol(BoxLayout):
     pass
@@ -33,21 +34,29 @@ class ScreenPatient(Screen):
     c_id = False
     
     def set_patient(self):
+        self.p_id = False
         id = self.ids.patient_code.text
         if id.isdigit() and len(id) == 7:
-            self.p_id = self.manager.set_patient(self.ids.patient_code.text)
+            self.p_id = self.manager.set_patient(id)[0]
+            if self.p_id == False:
+                self.ids.patient_code.text = 'Invalid: unknown patient'
+            else:
+                self.ids.consultation_code.disabled = False
         else:
-            self.ids.patient_code.text = 'Invalide input: 7 digits'
+            self.ids.patient_code.text = 'Invalid: 7 digits'
             self.p_id = False
         self.disable_button()
         
 
     def set_consultation(self):
+        self.c_id = False
         id = self.ids.consultation_code.text
         if id.isdigit() and len(id) == 8:
-            self.c_id = self.manager.set_consultation(self.ids.consultation_code.text)
+            self.c_id = self.manager.set_consultation(id, self.ids.patient_code.text)
+            if self.c_id == False:
+                self.ids.consultation_code.text = 'Invalid: double consultation'
         else:
-            self.ids.consultation_code.text = 'Invalide input: 8 digits'
+            self.ids.consultation_code.text = 'Invalid: 8 digits'
             self.c_id = False
         self.disable_button()
     
@@ -216,8 +225,9 @@ class Manager(ScreenManager):
     screen_measure = ObjectProperty(None)
     screen_result = ObjectProperty(None)
     data_dic = {}
-    patient_id = ''
-    consultation_id = ''
+    df_patients = ''
+    df_consultations = ''
+
 
     def set_store_questions(self):
         self.data_dic['Pain, Left Arm'] = self.screen_questions.ids.list1_l.text
@@ -440,32 +450,40 @@ class Manager(ScreenManager):
             writer.writerow(self.data_dic)
 
     def set_patient(self, id):
-        self.patient_id = id
-        return True
-
-    def set_consultation(self, id):
-        self.consultation_id = id
-        return True
+        return pd.Series(int(id)).isin(self.df_patients.index)
+        
+    def set_consultation(self, id, patient):
+        if self.set_patient(patient)[0] and (not pd.Series(int(id)).isin(self.df_consultations.index)[0]):
+            self.df_consultations.loc[int(id)] = ['', '']
+            list_consult = self.df_patients.loc[int(patient), 'consultation_list']
+            list_consult.add(int(id))
+            self.df_patients.loc[int(patient), 'consultation_list'] =  list_consult
+            return True
+        else:
+            return False
 
 
 class ShoulderTestApp(App):
     def build(self):
         #### Temporary solution : custom Pandas dataframes
+        m = Manager()
         df_patients = pd.DataFrame(
             {'patient_code': [1001111, 1001112, 1001113],
-             'consultation_list': [(10120010, 10120011, 10120012, 10120013), \
-             (10120021), (10120031, 10120032)]},
+             'consultation_list': [{10120010, 10120011, 10120012, 10120013}, \
+             {10120021}, {10120031, 10120032}]},
         )
         df_patients.set_index('patient_code', inplace=True)
+        m.df_patients = df_patients
         df_consultations = pd.DataFrame(
                 { 'consultation_code' : [10120010, 10120011, 10120012, 10120013, \
                 10120021, 10120031, 10120032],
                   'score_left': [10, 15, 13, 42, 37, 38, 28],
                   'score_right': [40, 39,37,12,13,11,27]                    
-                })
+                })     
         df_consultations.set_index('consultation_code', inplace=True)
+        m.df_consultations = df_consultations
         ####
-        return Manager()
+        return m
 
 if __name__ == '__main__':
     ShoulderTestApp().run()

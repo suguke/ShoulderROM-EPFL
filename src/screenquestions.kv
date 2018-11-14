@@ -11,6 +11,7 @@
 
             TabbedPanelItem:
                 text: 'Douleurs'
+                background_color: [0,1,0,0.8] if root.ids.list1_l.text != 'Reponse' and root.ids.list1_r.text != 'Reponse' else [1,1,1,1]
                 BoxLayout:
                     orientation: 'vertical'
                     RelativeLayout:
@@ -45,6 +46,7 @@
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe')
             TabbedPanelItem:
                 text: 'Activite 1'
+                background_color: [0,1,0,0.8] if root.ids.list2_l.text != 'Reponse' and root.ids.list2_r.text != 'Reponse' else [1,1,1,1]
                 BoxLayout:
                     orientation: 'vertical'
                     RelativeLayout:
@@ -79,6 +81,7 @@
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
             TabbedPanelItem:
                 text: 'Activite 2'
+                background_color: [0,1,0,0.8] if root.ids.list3_l.text != 'Reponse' and root.ids.list3_r.text != 'Reponse' else [1,1,1,1]
                 BoxLayout:
                     orientation: 'vertical'
                     RelativeLayout:
@@ -113,6 +116,7 @@
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
             TabbedPanelItem:
                 text: 'Activite 3'
+                background_color: [0,1,0,0.8] if root.ids.list4_l.text != 'Reponse' and root.ids.list4_r.text != 'Reponse' else [1,1,1,1]
                 BoxLayout:
                     orientation: 'vertical'
                     RelativeLayout:
@@ -147,6 +151,7 @@
                                 values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
             TabbedPanelItem:
                 text: 'Activite 4'
+                background_color: [0,1,0,0.8] if root.ids.list5_l.text != 'Reponse' and root.ids.list5_r.text != 'Reponse' else [1,1,1,1]
                 BoxLayout:
                     orientation: 'vertical'
                     RelativeLayout:
