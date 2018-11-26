@@ -2,7 +2,7 @@ import numpy as np
 import csv
 import pandas as pd
 
-fileLoc = '../data/F_H_angle3_5.csv'
+fileLoc = '../data/A_H_90_5.csv'
 
 def computeAngle(v1, v2):
     angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
@@ -10,7 +10,7 @@ def computeAngle(v1, v2):
 
 def getStartVector():
     data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
-    startVector = data.iloc[0:128].median()
+    startVector = data.iloc[0:256].median()
     return startVector
 
 def getEndVector():
