@@ -2,7 +2,7 @@ import numpy as np
 import csv
 import pandas as pd
 
-fileLoc = '../data/A_H_90_5.csv'
+fileLoc = '../data/A_H_120_6.csv'
 
 def computeAngle(v1, v2):
     angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
