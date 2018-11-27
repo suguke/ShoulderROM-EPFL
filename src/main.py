@@ -25,6 +25,7 @@ Builder.load_file('screenquestions.kv')
 import random
 import csv
 import pandas as pd
+import numpy as np
 
 class Protocol(BoxLayout):
     pass
@@ -80,6 +81,10 @@ class ScreenMeasure(Screen):
     
     state = 1
     state_list = ['', 'Flexion', 'Abduction', 'External Rotation', 'Internal Rotation', '']
+    startVectorL = []
+    endVectorL = []
+    startVectorR = []
+    endVectorR = []
 
     def set_state(self):
         self.ids.step_label.text = self.state_list[self.state]
@@ -125,9 +130,20 @@ class ScreenMeasure(Screen):
             self.ids.next.text = 'Suivant'
             self.ids.back.text = 'Précédent'
 
+    def computeAngle(v1, v2):
+        angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
+        return angle
 
+    def getStartVector():
+        data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
+        startVector = data.iloc[0:128].median()
+        return startVector
+
+    def getEndVector():
+        data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
+        endVector = data.iloc[-256:].median()
+        return endVector
         
-
     def display_state(self,state):
         self.ids.state_label.text = state
 
@@ -137,23 +153,18 @@ class ScreenMeasure(Screen):
     def display_angle_right(self, angle):
         self.ids.angle_right.text = 'Right Arm Angle : ' + angle
 
-    def get_angle(self):
-        #angle =  dummy_function()
-        angle_l = str(random.randint(0,180)) + '°'
-        angle_r = str(random.randint(0,180)) + '°'
-        self.display_angle_left(angle_l)
-        self.display_angle_right(angle_r)
-
     def measure(self):
         if self.ids.start_stop.text == 'Start':
+            self.startVectorL = self.getStartVector()
             self.display_state('Measurement')
             self.ids.start_stop.text = 'Stop'
             self.ids.back.disabled = True
             self.ids.next.disabled = True
 
         elif self.ids.start_stop.text == 'Stop':
+            self.endVectorL = self.getEndVector()
+            self.display_angle_left(self.computeAngle(self.startVectorL, self.endVectorL))
             self.display_state('Done')
-            self.get_angle()
             self.ids.start_stop.text = 'Start'
             self.ids.start_stop.disabled = True
             self.ids.redo.disabled = False
