@@ -1,6 +1,7 @@
 #:kivy 1.10.0
 
 <ScreenMeasure>:
+    
     BoxLayout:
         orientation: 'horizontal'
         BoxLayout:
@@ -50,11 +51,20 @@
                 id: state_label
                 text: 'State label'
 
-            Button:
-                id: start_stop
-                text: 'Start'
-                size_hint: 1, 1
-                on_press: root.measure()
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Button:
+                    id: import_left
+                    text: 'Import Left'
+                    size_hint: 1, 1
+                    on_press: root.show_load('left')
+
+                Button:
+                    id: import_right
+                    text: 'Import Right'
+                    size_hint: 1, 1
+                    on_press: root.show_load('right')
 
             BoxLayout:
                 orientation: 'horizontal'
@@ -75,20 +85,31 @@
                     multiline: False
                     on_text_validate: root.overwriteRight()
                     
-            BoxLayout:
-                orientation: 'horizontal'
+            Button:
+                id: validate
+                text: 'Validate'
+                disabled: True
+                on_press: root.validate()
 
-                Button:
-                    id: redo
-                    text: 'Redo'
-                    on_press: root.redo()
-                    disabled: True
 
-                Button:
-                    id: validate
-                    text: 'Validate'
-                    disabled: True
-                    on_press: root.validate()
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
 
 
 

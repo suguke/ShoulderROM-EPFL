@@ -11,6 +11,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.spinner import Spinner
 from kivy.uix.tabbedpanel import TabbedPanel
 from kivy.properties import ObjectProperty
+from kivy.uix.popup import Popup
+from kivy.factory import Factory
 from kivy.lang import Builder
 
 
@@ -26,6 +28,7 @@ import random
 import csv
 import pandas as pd
 import numpy as np
+import os
 
 class Protocol(BoxLayout):
     pass
@@ -76,15 +79,16 @@ class ScreenQuestions(Screen):
         self.manager.set_store_questions()
         self.manager.current = 'Measurement Screen'
 
+class LoadDialog(FloatLayout):
+    load = ObjectProperty(None)
+    cancel = ObjectProperty(None)
 
 class ScreenMeasure(Screen):
     
     state = 1
     state_list = ['', 'Flexion', 'Abduction', 'External Rotation', 'Internal Rotation', '']
-    startVectorL = []
-    endVectorL = []
-    startVectorR = []
-    endVectorR = []
+    startVector = []
+    endVector = []
 
     def set_state(self):
         self.ids.step_label.text = self.state_list[self.state]
@@ -102,7 +106,6 @@ class ScreenMeasure(Screen):
             self.ids.state_label.text = 'Error'
         
         self.update_navigation()
-        self.ids.start_stop.disabled = False           
 
     def update_navigation(self):
         self.ids.next.disabled = False
@@ -130,20 +133,37 @@ class ScreenMeasure(Screen):
             self.ids.next.text = 'Suivant'
             self.ids.back.text = 'Précédent'
 
-    def computeAngle(v1, v2):
-        angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
-        return angle
+    def dismiss_popup(self):
+        self._popup.dismiss()
 
-    def getStartVector():
+    def load(self, path, filename):
+        stream = os.path.join(path, filename[0])
+        self.startVector = self.getStartVector(stream)
+        self.endVector = self.getEndVector(stream)
+        self.measure(self.direction)
+        self.dismiss_popup()
+
+    def show_load(self, direction):
+        self.direction = direction
+        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
+        self._popup = Popup(title="Load file", content=content,
+                            size_hint=(0.9, 0.9))
+        self._popup.open()
+
+    def computeAngle(self,v1, v2):
+        angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
+        return int(round(angle,0))
+
+    def getStartVector(self,fileLoc):
         data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
         startVector = data.iloc[0:128].median()
         return startVector
 
-    def getEndVector():
+    def getEndVector(self,fileLoc):
         data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
         endVector = data.iloc[-256:].median()
         return endVector
-        
+    
     def display_state(self,state):
         self.ids.state_label.text = state
 
@@ -153,40 +173,20 @@ class ScreenMeasure(Screen):
     def display_angle_right(self, angle):
         self.ids.angle_right.text = 'Right Arm Angle : ' + angle
 
-    def measure(self):
-        if self.ids.start_stop.text == 'Start':
-            self.startVectorL = self.getStartVector()
-            self.display_state('Measurement')
-            self.ids.start_stop.text = 'Stop'
-            self.ids.back.disabled = True
-            self.ids.next.disabled = True
-
-        elif self.ids.start_stop.text == 'Stop':
-            self.endVectorL = self.getEndVector()
-            self.display_angle_left(self.computeAngle(self.startVectorL, self.endVectorL))
-            self.display_state('Done')
-            self.ids.start_stop.text = 'Start'
-            self.ids.start_stop.disabled = True
-            self.ids.redo.disabled = False
-            self.ids.validate.disabled = False
+    def measure(self, direction):
+        if direction == 'left':
+            self.display_angle_left(str(self.computeAngle(self.startVector, self.endVector)) + '°')
             self.ids.overinput_left.disabled = False
+        elif direction == 'right':
+            self.display_angle_right(str(self.computeAngle(self.startVector, self.endVector)) + '°')
             self.ids.overinput_right.disabled = False
         else:
-            self.display_state('Error')
-    
-    def redo(self):
-        self.display_state('Cleared')
-        self.display_angle_left('')
-        self.display_angle_right('')
-        self.ids.start_stop.text = 'Start'
-        self.ids.start_stop.disabled = False
-        self.ids.redo.disabled = True
-        self.ids.validate.disabled = True
-        self.ids.overinput_left.disabled = True
-        self.ids.overinput_right.disabled = True
-        self.ids.next.disabled = True
-        self.ids.back.disabled = True
-        self.cleaninput()
+            self.display_state('Error') 
+            
+        if self.ids.angle_left.text == 'Left Arm Angle : ' or self.ids.angle_right.text == 'Right Arm Angle : ':
+            self.ids.validate.disabled = True
+        else:
+            self.ids.validate.disabled = False
 
     def overwriteLeft(self):
         self.display_angle_left(self.ids.overinput_left.text + '°')
@@ -200,7 +200,6 @@ class ScreenMeasure(Screen):
 
     def validate(self):
         self.display_state('Validated')
-        self.ids.redo.disabled = True
         self.ids.validate.disabled = True
         self.ids.overinput_left.disabled = True
         self.ids.overinput_right.disabled = True
@@ -417,17 +416,17 @@ class Manager(ScreenManager):
 
         if q < 0:
             score += 999
-        elif q <= 15:
+        elif q <= 12:
             score += 0
-        elif q <= 30:
+        elif q <= 24:
             score += 2
-        elif q <= 45:
+        elif q <= 36:
             score += 4
-        elif q <= 60:
+        elif q <= 48:
             score += 6
-        elif q <= 75:
+        elif q <= 60:
             score += 8
-        elif q > 75:
+        elif q > 60:
             score += 10
         else: 
             score += 999
@@ -436,17 +435,17 @@ class Manager(ScreenManager):
 
         if q < 0:
             score += 999
-        elif q <= 15:
+        elif q <= 12:
             score += 0
-        elif q <= 30:
+        elif q <= 24:
             score += 2
-        elif q <= 45:
+        elif q <= 36:
             score += 4
-        elif q <= 60:
+        elif q <= 48:
             score += 6
-        elif q <= 75:
+        elif q <= 60:
             score += 8
-        elif q > 75:
+        elif q > 60:
             score += 10
         else: 
             score += 999
