@@ -8,7 +8,6 @@
             size_hint: 1, 10
             pos_hint: {'center_x': .5, 'center_y': .5}
             do_default_tab: False
-
             TabbedPanelItem:
                 text: 'Douleurs'
                 background_color: [0,1,0,0.8] if root.ids.list1_l.text != 'Reponse' and root.ids.list1_r.text != 'Reponse' else [1,1,1,1]
@@ -19,6 +18,7 @@
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
                             text: 'Quelle est l intensite de vos douleurs de l epaule lors d activite ordinaire les dernieres 24h ?'
+                            font_size: 25
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
@@ -30,8 +30,10 @@
                             pos_hint: {'x': 0, 'y': 0.5}
                             Label:
                                 text: 'Bras Gauche'
+                                font_size: 25
                             Label:
                                 text: 'Bras Droit'
+                                font_size: 25
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
@@ -40,10 +42,12 @@
                                 id: list1_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+                                font_size: 25
                             Spinner:
                                 id: list1_r
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe')
+                                font_size: 25
             TabbedPanelItem:
                 text: 'Activite 1'
                 background_color: [0,1,0,0.8] if root.ids.list2_l.text != 'Reponse' and root.ids.list2_r.text != 'Reponse' else [1,1,1,1]
@@ -54,6 +58,7 @@
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
                             text: 'Quel est l impact de votre probleme d epaule sur votre activite professionnelle ? Si vous n etes pas actif professionnellement, quel est l impact sur votre activite quotidienne ?'
+                            font_size: 25
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
@@ -65,8 +70,10 @@
                             pos_hint: {'x': 0, 'y': 0.5}
                             Label:
                                 text: 'Bras Gauche'
+                                font_size: 25
                             Label:
                                 text: 'Bras Droit'
+                                font_size: 25
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
@@ -75,10 +82,12 @@
                                 id: list2_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                                font_size: 25
                             Spinner:
                                 id: list2_r
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                                font_size: 25
             TabbedPanelItem:
                 text: 'Activite 2'
                 background_color: [0,1,0,0.8] if root.ids.list3_l.text != 'Reponse' and root.ids.list3_r.text != 'Reponse' else [1,1,1,1]
@@ -89,6 +98,7 @@
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
                             text: 'Quel est l impact de votre probleme d epaule sur votre activite de loisir (sport, jardinage, bricolage musique, ...)?'
+                            font_size: 25
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
@@ -100,8 +110,10 @@
                             pos_hint: {'x': 0, 'y': 0.5}
                             Label:
                                 text: 'Bras Gauche'
+                                font_size: 25
                             Label:
                                 text: 'Bras Droit'
+                                font_size: 25
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
@@ -110,10 +122,12 @@
                                 id: list3_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                                font_size: 25
                             Spinner:
                                 id: list3_r
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
+                                font_size: 25
             TabbedPanelItem:
                 text: 'Activite 3'
                 background_color: [0,1,0,0.8] if root.ids.list4_l.text != 'Reponse' and root.ids.list4_r.text != 'Reponse' else [1,1,1,1]
@@ -124,6 +138,7 @@
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
                             text: 'Est-ce que votre sommeil est perturbe par votre probleme d epaule ?'
+                            font_size: 25
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
@@ -135,8 +150,10 @@
                             pos_hint: {'x': 0, 'y': 0.5}
                             Label:
                                 text: 'Bras Gauche'
+                                font_size: 25
                             Label:
                                 text: 'Bras Droit'
+                                font_size: 25
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
@@ -145,10 +162,12 @@
                                 id: list4_l
                                 text: 'Reponse'
                                 values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
+                                font_size: 25
                             Spinner:
                                 id: list4_r
                                 text: 'Reponse'
                                 values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
+                                font_size: 25
             TabbedPanelItem:
                 text: 'Activite 4'
                 background_color: [0,1,0,0.8] if root.ids.list5_l.text != 'Reponse' and root.ids.list5_r.text != 'Reponse' else [1,1,1,1]
@@ -159,6 +178,7 @@
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
                             text: 'Hauteur d utilisation de la main sans douleurs d epaule'
+                            font_size: 25
                             disabled: True
                             readonly: True
                             font_color: [1, 1, 1, 1]
@@ -170,8 +190,10 @@
                             pos_hint: {'x': 0, 'y': 0.5}
                             Label:
                                 text: 'Bras Gauche'
+                                font_size: 25
                             Label:
                                 text: 'Bras Droit'
+                                font_size: 25
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
@@ -180,10 +202,12 @@
                                 id: list5_l
                                 text: 'Reponse'
                                 values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
+                                font_size: 25
                             Spinner:
                                 id: list5_r
                                 text: 'Reponse'
                                 values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
+                                font_size: 25
         BoxLayout:
             orientation: 'horizontal'
 
@@ -196,6 +220,7 @@
                     size_hint: None, 1
                     width: self.texture_size[0] * 1.5
                     text: 'Retour accueil'
+                    font_size: 25
                     on_press: root.manager.current = 'Patient Screen'
 
             AnchorLayout:
@@ -207,5 +232,6 @@
                     size_hint: None, 1
                     width: root.ids.back.width
                     text: 'Suite'
+                    font_size: 25
                     on_press: root.validate()
                     disabled: False if (root.ids.list1_l.text != 'Reponse' and root.ids.list1_r.text != 'Reponse' and root.ids.list2_l.text != 'Reponse' and root.ids.list2_r.text != 'Reponse' and root.ids.list3_l.text != 'Reponse' and root.ids.list3_r.text != 'Reponse' and root.ids.list4_l.text != 'Reponse' and root.ids.list4_r.text != 'Reponse' and root.ids.list5_l.text != 'Reponse' and root.ids.list5_r.text != 'Reponse') else True

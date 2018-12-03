@@ -10,10 +10,11 @@
             BoxLayout:
                 orientation: 'horizontal'
                 Label:
-                    text: 'Patient Code'
+                    text: 'Code Patient'
+                    font_size: 20
                 TextInput:
                     id: patient_code
-                    font_size: 30
+                    font_size: 27
                     input_filter: 'int' 
                     multiline: False
                     on_text_validate: root.set_patient()
@@ -21,11 +22,12 @@
             BoxLayout:
                 orientation: 'horizontal'
                 Label:
-                    text: 'Consultation code'
+                    text: 'Code Consultation'
+                    font_size: 20
                 TextInput:
                     id: consultation_code
                     disabled: True
-                    font_size: 30
+                    font_size: 27
                     input_filter: 'int' 
                     multiline: False
                     on_text_validate: root.set_consultation()
@@ -34,6 +36,7 @@
             Button:
                 id: go
                 text: 'Commencer'
+                font_size: 20
                 on_press: root.validate()
                 disabled: True
             

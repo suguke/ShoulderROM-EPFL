@@ -43,11 +43,11 @@ class ScreenPatient(Screen):
         if id.isdigit() and len(id) == 7:
             self.p_id = self.manager.set_patient(id)[0]
             if self.p_id == False:
-                self.ids.patient_code.text = 'Invalid: unknown patient'
+                self.ids.patient_code.text = 'Patient inconnu'
             else:
                 self.ids.consultation_code.disabled = False
         else:
-            self.ids.patient_code.text = 'Invalid: 7 digits'
+            self.ids.patient_code.text = 'Code invalide'
             self.p_id = False
         self.disable_button()
         
@@ -58,9 +58,9 @@ class ScreenPatient(Screen):
         if id.isdigit() and len(id) == 8:
             self.c_id = self.manager.set_consultation(id, self.ids.patient_code.text)
             if self.c_id == False:
-                self.ids.consultation_code.text = 'Invalid: double consultation'
+                self.ids.consultation_code.text = 'Consultation double'
         else:
-            self.ids.consultation_code.text = 'Invalid: 8 digits'
+            self.ids.consultation_code.text = 'Code invalide'
             self.c_id = False
         self.disable_button()
     
@@ -103,7 +103,7 @@ class ScreenMeasure(Screen):
             self.ids.step_label.text = self.state_list[self.state]                
              
         else:
-            self.ids.state_label.text = 'Error'
+            self.ids.step_label.text = 'Erreur'
         
         self.update_navigation()
 
@@ -146,7 +146,7 @@ class ScreenMeasure(Screen):
     def show_load(self, direction):
         self.direction = direction
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
-        self._popup = Popup(title="Load file", content=content,
+        self._popup = Popup(title="Charger Fichier", content=content,
                             size_hint=(0.9, 0.9))
         self._popup.open()
 
@@ -164,14 +164,11 @@ class ScreenMeasure(Screen):
         endVector = data.iloc[-256:].median()
         return endVector
     
-    def display_state(self,state):
-        self.ids.state_label.text = state
-
     def display_angle_left(self, angle):
-        self.ids.angle_left.text = 'Left Arm Angle : ' + angle
+        self.ids.angle_left.text = 'Angle Bras Gauche : ' + angle
 
     def display_angle_right(self, angle):
-        self.ids.angle_right.text = 'Right Arm Angle : ' + angle
+        self.ids.angle_right.text = 'Angle Bras Droit: ' + angle
 
     def measure(self, direction):
         if direction == 'left':
@@ -181,9 +178,9 @@ class ScreenMeasure(Screen):
             self.display_angle_right(str(self.computeAngle(self.startVector, self.endVector)) + '°')
             self.ids.overinput_right.disabled = False
         else:
-            self.display_state('Error') 
+            self.ids.overinput_left.text = 'Erreur' 
             
-        if self.ids.angle_left.text == 'Left Arm Angle : ' or self.ids.angle_right.text == 'Right Arm Angle : ':
+        if self.ids.angle_left.text == 'Angle Bras Gauche : ' or self.ids.angle_right.text == 'Angle Bras Droit: ':
             self.ids.validate.disabled = True
         else:
             self.ids.validate.disabled = False
@@ -199,27 +196,26 @@ class ScreenMeasure(Screen):
         self.ids.overinput_right.text = ''      
 
     def validate(self):
-        self.display_state('Validated')
         self.ids.validate.disabled = True
         self.ids.overinput_left.disabled = True
         self.ids.overinput_right.disabled = True
         
 
         if self.state == 1:
-            self.ids.table.ids.flexion_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.flexion_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.flexion_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 2:
-            self.ids.table.ids.abduction_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.abduction_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.abduction_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 3:
-            self.ids.table.ids.ext_rot_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.ext_rot_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.ext_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
         elif self.state == 4:
-            self.ids.table.ids.int_rot_left.text = self.ids.angle_left.text[17:-1] + '°'
+            self.ids.table.ids.int_rot_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.int_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
         else: 
-            self.ids.state_label.text == 'Error'
-        
+            self.ids.angle_left.text = 'Erreur' 
+
         self.display_angle_left('')
         self.display_angle_right('')
         
@@ -234,39 +230,41 @@ class Manager(ScreenManager):
     screen_questions = ObjectProperty(None)
     screen_measure = ObjectProperty(None)
     screen_result = ObjectProperty(None)
-    data_dic = {}
+    df_data = pd.DataFrame(index = ['Left Arm', 'Right Arm'], columns = ['Pain', 'Activity 1', \
+        'Activity 2', 'Activity 3', 'Activity 4', 'Flexion', 'Abduction', 'External Rotation', \
+        'Internal Rotation', 'Score'])
     df_patients = ''
     df_consultations = ''
 
 
     def set_store_questions(self):
-        self.data_dic['Pain, Left Arm'] = self.screen_questions.ids.list1_l.text
-        self.data_dic['Pain, Right Arm'] = self.screen_questions.ids.list1_r.text
-        self.data_dic['Activity 1, Left Arm'] = self.screen_questions.ids.list2_l.text
-        self.data_dic['Activity 1, Right Arm'] = self.screen_questions.ids.list2_r.text
-        self.data_dic['Activity 2, Left Arm'] = self.screen_questions.ids.list3_l.text
-        self.data_dic['Activity 2, Right Arm'] = self.screen_questions.ids.list3_r.text
-        self.data_dic['Activity 3, Left Arm'] = self.screen_questions.ids.list4_l.text
-        self.data_dic['Activity 3, Right Arm'] = self.screen_questions.ids.list4_r.text
-        self.data_dic['Activity 4, Left Arm'] = self.screen_questions.ids.list5_l.text
-        self.data_dic['Activity 4, Right Arm'] = self.screen_questions.ids.list5_r.text
+        self.df_data['Pain']['Left Arm'] = self.screen_questions.ids.list1_l.text
+        self.df_data['Pain']['Right Arm'] = self.screen_questions.ids.list1_r.text
+        self.df_data['Activity 1']['Left Arm'] = self.screen_questions.ids.list2_l.text
+        self.df_data['Activity 1']['Right Arm'] = self.screen_questions.ids.list2_r.text
+        self.df_data['Activity 2']['Left Arm'] = self.screen_questions.ids.list3_l.text
+        self.df_data['Activity 2']['Right Arm'] = self.screen_questions.ids.list3_r.text
+        self.df_data['Activity 3']['Left Arm'] = self.screen_questions.ids.list4_l.text
+        self.df_data['Activity 3']['Right Arm'] = self.screen_questions.ids.list4_r.text
+        self.df_data['Activity 4']['Left Arm'] = self.screen_questions.ids.list5_l.text
+        self.df_data['Activity 4']['Right Arm'] = self.screen_questions.ids.list5_r.text
 
     def set_store_measures(self):
-        self.data_dic['Flexion, Left Arm'] = \
+        self.df_data['Flexion']['Left Arm'] = \
             self.screen_measure.ids.table.ids.flexion_left.text[:-1]
-        self.data_dic['Flexion, Right Arm'] = \
+        self.df_data['Flexion']['Right Arm'] = \
             self.screen_measure.ids.table.ids.flexion_right.text[:-1]
-        self.data_dic['Abduction, Left Arm'] = \
+        self.df_data['Abduction']['Left Arm'] = \
             self.screen_measure.ids.table.ids.abduction_left.text[:-1]
-        self.data_dic['Abduction, Right Arm'] = \
+        self.df_data['Abduction']['Right Arm'] = \
             self.screen_measure.ids.table.ids.abduction_right.text[:-1]
-        self.data_dic['External Rotation, Left Arm'] = \
+        self.df_data['External Rotation']['Left Arm'] = \
             self.screen_measure.ids.table.ids.ext_rot_left.text[:-1]
-        self.data_dic['External Rotation, Right Arm'] = \
+        self.df_data['External Rotation']['Right Arm'] = \
             self.screen_measure.ids.table.ids.ext_rot_right.text[:-1]
-        self.data_dic['Internal Rotation, Left Arm'] = \
+        self.df_data['Internal Rotation']['Left Arm'] = \
             self.screen_measure.ids.table.ids.int_rot_left.text[:-1]
-        self.data_dic['Internal Rotation, Right Arm'] = \
+        self.df_data['Internal Rotation']['Right Arm'] = \
             self.screen_measure.ids.table.ids.int_rot_right.text[:-1]
     
     def set_store(self):
@@ -275,21 +273,21 @@ class Manager(ScreenManager):
 
     def get_store(self):
         self.screen_result.ids.result.ids.flexion_left.text = \
-            self.data_dic.get('Flexion, Left Arm', 'Not found')
+            self.df_data['Flexion']['Left Arm']
         self.screen_result.ids.result.ids.flexion_right.text = \
-            self.data_dic.get('Flexion, Right Arm', 'Not found')
+            self.df_data['Flexion']['Right Arm']
         self.screen_result.ids.result.ids.abduction_left.text = \
-            self.data_dic.get('Abduction, Left Arm', 'Not found')
+            self.df_data['Abduction']['Left Arm']
         self.screen_result.ids.result.ids.abduction_right.text = \
-            self.data_dic.get('Abduction, Right Arm', 'Not found')
+            self.df_data['Abduction']['Right Arm']
         self.screen_result.ids.result.ids.ext_rot_left.text = \
-            self.data_dic.get('External Rotation, Left Arm', 'Not found')
+            self.df_data['External Rotation']['Left Arm']
         self.screen_result.ids.result.ids.ext_rot_right.text = \
-            self.data_dic.get('External Rotation, Right Arm', 'Not found')
+            self.df_data['External Rotation']['Right Arm']
         self.screen_result.ids.result.ids.int_rot_left.text = \
-            self.data_dic.get('Internal Rotation, Left Arm', 'Not found')
+            self.df_data['Internal Rotation']['Left Arm']
         self.screen_result.ids.result.ids.int_rot_right.text = \
-            self.data_dic.get('Internal Rotation, Right Arm', 'Not found') 
+            self.df_data['Internal Rotation']['Right Arm'] 
         self.score()
 
     def score(self):
@@ -297,15 +295,15 @@ class Manager(ScreenManager):
         score_right = self.get_score_questions('Right')
         score_diff = abs(score_left - score_right)
 
-        self.data_dic['Score Left'] = score_left
-        self.data_dic['Score Right'] = score_right
+        self.df_data['Score']['Left Arm'] = score_left
+        self.df_data['Score']['Right Arm'] = score_right
         self.screen_result.ids.left.text = str(score_left)
         self.screen_result.ids.right.text = str(score_right)
         self.screen_result.ids.diff.text = str(score_diff)
 
     def get_score_questions(self, side):
         score = 0
-        q = self.data_dic.get('Pain, ' + side + ' Arm')
+        q = self.df_data['Pain'][side + ' Arm']
 
         if q == 'Aucune':
             score += 15
@@ -318,7 +316,7 @@ class Manager(ScreenManager):
         else:
             score += 999
 
-        q = self.data_dic.get('Activity 1, ' + side + ' Arm')
+        q = self.df_data['Activity 1'][side + ' Arm']
 
         if q == 'Aucune':
             score += 4
@@ -333,7 +331,7 @@ class Manager(ScreenManager):
         else:
             score += 999
         
-        q = self.data_dic.get('Activity 2, ' + side + ' Arm')
+        q = self.df_data['Activity 2'][side + ' Arm']
 
         if q == 'Aucune':
             score += 4
@@ -348,7 +346,7 @@ class Manager(ScreenManager):
         else:
             score += 999
         
-        q = self.data_dic.get('Activity 3, ' + side + ' Arm')
+        q = self.df_data['Activity 3'][side + ' Arm']
 
         if q == 'Jamais':
             score += 2
@@ -359,7 +357,7 @@ class Manager(ScreenManager):
         else:
             score += 999
 
-        q = self.data_dic.get('Activity 4, ' + side + ' Arm')
+        q = self.df_data['Activity 4'][side + ' Arm']
 
         if q == 'Au-dessus de la tete':
             score += 10
@@ -374,7 +372,7 @@ class Manager(ScreenManager):
         else:
             score += 999
 
-        q = int(self.data_dic.get('Flexion, ' + side + ' Arm'))
+        q = int(self.df_data['Flexion'][side + ' Arm'])
 
         if q < 0:
             score += 999
@@ -393,7 +391,7 @@ class Manager(ScreenManager):
         else: 
             score += 999
 
-        q = int(self.data_dic.get('Abduction, ' + side + ' Arm'))
+        q = int(self.df_data['Abduction'][side + ' Arm'])
 
         if q < 0:
             score += 999
@@ -412,7 +410,7 @@ class Manager(ScreenManager):
         else: 
             score += 999
 
-        q = int(self.data_dic.get('External Rotation, ' + side + ' Arm'))
+        q = int(self.df_data['External Rotation'][side + ' Arm'])
 
         if q < 0:
             score += 999
@@ -431,7 +429,7 @@ class Manager(ScreenManager):
         else: 
             score += 999
 
-        q = int(self.data_dic.get('Internal Rotation, ' + side + ' Arm'))
+        q = int(self.df_data['Internal Rotation'][side + ' Arm'])
 
         if q < 0:
             score += 999
@@ -453,11 +451,7 @@ class Manager(ScreenManager):
         return score
 
     def save(self):
-
-        with open('../Results/shoulderROM_score.csv', 'w') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=self.data_dic.keys())
-            writer.writeheader()
-            writer.writerow(self.data_dic)
+        self.df_data.transpose(copy=True).to_csv('../Results/shoulderROM_score.csv')
 
     def set_patient(self, id):
         return pd.Series(int(id)).isin(self.df_patients.index)

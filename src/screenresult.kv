@@ -13,6 +13,7 @@
         Label:
             id: score
             text: 'Score : ' 
+            font_size: 25
         
         BoxLayout:
             orientation: 'vertical'
@@ -22,27 +23,33 @@
 
                 Label:
                     text: 'Gauche :' 
+                    font_size: 25
 
                 Label:
                     text: 'Diff :'
+                    font_size: 25
 
                 Label:
                     text: 'Droite :'
+                    font_size: 25
 
             BoxLayout:
                 orientation: 'horizontal'
 
                 Label:
                     id: left
-                    text: '' 
+                    text: ''
+                    font_size: 25 
 
                 Label:
                     id: diff
-                    text: ''  
+                    text: ''
+                    font_size: 25  
 
                 Label:
                     id: right
                     text: ''
+                    font_size: 25
                     
         BoxLayout:
             orientation: 'horizontal'
@@ -56,6 +63,7 @@
                     size_hint: None, 1
                     width: self.texture_size[0] * 1.2
                     text: 'Retour aux mesures'
+                    font_size: 25
                     on_press: root.manager.current = 'Measurement Screen'
 
             AnchorLayout:
@@ -66,5 +74,6 @@
                 Button:
                     size_hint: None, 1
                     width: root.ids.back.width
-                    text: 'Save'
+                    text: 'Sauvegarder'
+                    font_size: 25
                     on_press: root.manager.save()

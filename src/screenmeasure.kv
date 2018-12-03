@@ -19,11 +19,13 @@
                 Button:
                     id: back
                     text: 'Retour aux questions'
+                    font_size: 25
                     on_press: root.update_state('back')
                     
                 Button:
                     id: next
                     text: 'Suivant'
+                    font_size: 25
                     on_press: root.update_state('next')
 
         BoxLayout:
@@ -33,36 +35,34 @@
             Label:
                 id: step_label
                 text: 'Flexion'
-    
-            BoxLayout:
-                orientation: 'horizontal'
-
-                Label:
-                    id: angle_left
-                    text: 'Left Arm Angle : '
-                    size: self.texture_size
-
-                Label:
-                    id: angle_right
-                    text: 'Right Arm Angle : '
-                    size: self.texture_size
+                font_size: 25
 
             Label:
-                id: state_label
-                text: 'State label'
+                id: angle_left
+                text: 'Angle Bras Gauche : '
+                font_size: 25
+                size: self.texture_size
+
+            Label:
+                id: angle_right
+                text: 'Angle Bras Droit : '
+                font_size: 25
+                size: self.texture_size
 
             BoxLayout:
                 orientation: 'horizontal'
 
                 Button:
                     id: import_left
-                    text: 'Import Left'
+                    text: 'Import gauche'
+                    font_size: 25
                     size_hint: 1, 1
                     on_press: root.show_load('left')
 
                 Button:
                     id: import_right
-                    text: 'Import Right'
+                    text: 'Import droit'
+                    font_size: 25
                     size_hint: 1, 1
                     on_press: root.show_load('right')
 
@@ -71,7 +71,7 @@
                 
                 TextInput:
                     id: overinput_left
-                    font_size: 30
+                    font_size: 27
                     input_filter: 'int' 
                     disabled: True
                     multiline: False
@@ -79,7 +79,7 @@
                 
                 TextInput:
                     id: overinput_right
-                    font_size: 30
+                    font_size: 27
                     input_filter: 'int' 
                     disabled: True
                     multiline: False
@@ -87,7 +87,8 @@
                     
             Button:
                 id: validate
-                text: 'Validate'
+                text: 'Valider'
+                font_size: 25
                 disabled: True
                 on_press: root.validate()
 
@@ -99,16 +100,17 @@
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
+            path: './'
 
         BoxLayout:
             size_hint_y: None
             height: 30
             Button:
-                text: "Cancel"
+                text: "Annuler"
                 on_release: root.cancel()
 
             Button:
-                text: "Load"
+                text: "Charger"
                 on_release: root.load(filechooser.path, filechooser.selection)
 
 
