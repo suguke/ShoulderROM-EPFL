@@ -73,20 +73,16 @@ plot(realcumrot - vecnorm(rotNO80140'))
 hold off
 legend('with offset', 'without offset')
 title('Difference between theoretical and measured angles')
-%%
-monSignal = diff(realcumrot) - diff(vecnorm(rot140200'));
 
 figure(2)
 subplot(2,1,1)
-plot(timevector(2:end), monSignal)
+plot((diff(realcumrot) - diff(vecnorm(rot140200'))))
 title('Variation of the offset during time')
-axis tight
 subplot(2,1,2)
-[y,g] =lowpass(monSignal,0.1);
-plot(timevector(15:end-16), y(15:end-15))
+[y,g] =lowpass((diff(realcumrot) - diff(vecnorm(rot140200'))),0.1);
+plot(20:7680-20, y(20:end-20))
 title('with lowpass')
-axis tight
-%%
+% monSignal = diff(realcumrot) - diff(vecnorm(rot140200'));
 monSignal = gyroData(start140:end200,4);
 
 [pxx, w] = periodogram(monSignal-mean(monSignal),[],[],128);
@@ -102,5 +98,3 @@ plot(freq, abs(fft(monSignal-mean(monSignal))))
 %%
 figure(5)
 plot(timevector(2:end), diff(vecnorm(rot140200')))
-hold on
-plot(timevector(2:end), diff(realcumrot))
