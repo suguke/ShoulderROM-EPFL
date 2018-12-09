@@ -1,5 +1,4 @@
 from kivy.app import App
-
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.relativelayout import RelativeLayout
@@ -232,7 +231,7 @@ class Manager(ScreenManager):
     screen_result = ObjectProperty(None)
     df_data = pd.DataFrame(index = ['Left Arm', 'Right Arm'], columns = ['Pain', 'Activity 1', \
         'Activity 2', 'Activity 3', 'Activity 4', 'Flexion', 'Abduction', 'External Rotation', \
-        'Internal Rotation', 'Score'])
+        'Internal Rotation', 'ISOBEX', 'Score'])
     df_patients = ''
     df_consultations = ''
 
@@ -248,6 +247,8 @@ class Manager(ScreenManager):
         self.df_data['Activity 3']['Right Arm'] = self.screen_questions.ids.list4_r.text
         self.df_data['Activity 4']['Left Arm'] = self.screen_questions.ids.list5_l.text
         self.df_data['Activity 4']['Right Arm'] = self.screen_questions.ids.list5_r.text
+        self.df_data['ISOBEX']['Left Arm'] = self.screen_questions.ids.iso_l.text
+        self.df_data['ISOBEX']['Right Arm'] = self.screen_questions.ids.iso_r.text
 
     def set_store_measures(self):
         self.df_data['Flexion']['Left Arm'] = \
@@ -447,6 +448,8 @@ class Manager(ScreenManager):
             score += 10
         else: 
             score += 999
+
+        score += int(self.df_data['ISOBEX'][side + ' Arm'])
 
         return score
 
