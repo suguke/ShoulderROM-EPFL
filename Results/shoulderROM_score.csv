@@ -1,12 +1,12 @@
 ,Left Arm,Right Arm
-Pain,Moderee,Severe
-Activity 1,Impossible,Severe
-Activity 2,Severe,Impossible
-Activity 3,Occasionnellement,Occasionnellement
-Activity 4,Xiphoide,Xiphoide
-Flexion, 112,112
-Abduction, 44,45
-External Rotation, 85,89
-Internal Rotation, 89,45
-ISOBEX,20,10
-Score,39,30
+Pain,Aucune,Moderee
+Activity 1,Legere,Severe
+Activity 2,Legere,Impossible
+Activity 3,Jamais,Occasionnellement
+Activity 4,Tete,Xiphoide
+Flexion, 112,86
+Abduction, 113,45
+External Rotation, 86,44
+Internal Rotation, 60,22
+ISOBEX,20,5
+Score,81,30
