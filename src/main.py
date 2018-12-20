@@ -1,3 +1,5 @@
+# Main of the application. Run it with `python main.py`
+
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
@@ -15,12 +17,12 @@ from kivy.factory import Factory
 from kivy.lang import Builder
 
 
-Builder.load_file('screenmeasure.kv')
-Builder.load_file('protocol.kv')
-Builder.load_file('manager.kv')
-Builder.load_file('screenresult.kv')
-Builder.load_file('screenpatient.kv')
-Builder.load_file('screenquestions.kv')
+Builder.load_file('./kvfiles/screenmeasure.kv')
+Builder.load_file('./kvfiles/protocol.kv')
+Builder.load_file('./kvfiles/manager.kv')
+Builder.load_file('./kvfiles/screenresult.kv')
+Builder.load_file('./kvfiles/screenpatient.kv')
+Builder.load_file('./kvfiles/screenquestions.kv')
 
 
 import random
@@ -30,69 +32,85 @@ import numpy as np
 import os
 
 class Protocol(BoxLayout):
+    '''Class for the Protocol widget'''
     pass
 
 class ScreenPatient(Screen):
+    '''Class for the Patient Screen'''
     p_id = False
     c_id = False
     
     def set_patient(self):
+        '''Check if patient code is 7-digits long'''
         self.p_id = False
         id = self.ids.patient_code.text
         if id.isdigit() and len(id) == 7:
             self.p_id = self.manager.set_patient(id)[0]
+
             if self.p_id == False:
                 self.ids.patient_code.text = 'Patient inconnu'
+
             else:
                 self.ids.consultation_code.disabled = False
+
         else:
             self.ids.patient_code.text = 'Code invalide'
             self.p_id = False
+
         self.disable_button()
         
 
     def set_consultation(self):
+        '''Check if consultation code is 8-digits long'''
         self.c_id = False
+
         id = self.ids.consultation_code.text
         if id.isdigit() and len(id) == 8:
             self.c_id = self.manager.set_consultation(id, self.ids.patient_code.text)
+
             if self.c_id == False:
                 self.ids.consultation_code.text = 'Consultation double'
+
         else:
             self.ids.consultation_code.text = 'Code invalide'
             self.c_id = False
+
         self.disable_button()
     
     def disable_button(self):
+        '''Manage the availability of the Begin button'''
         if self.p_id and self.c_id:
             self.ids.go.disabled = False
+
         else:
             self.ids.go.disabled = True
-    
-    def validate(self):
-        self.manager.current = 'Questions Screen'
-
+        
 class ScreenQuestions(Screen):
-         
+    '''Class for the Questions Screen'''
+
     def validate(self):
+        '''Save the answers and change the screen'''
         self.manager.set_store_questions()
         self.manager.current = 'Measurement Screen'
 
 class LoadDialog(FloatLayout):
+    '''Class for the Popup for importing files'''
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
 
 class ScreenMeasure(Screen):
-    
+    '''Class for the Measure Screen'''    
     state = 1
     state_list = ['', 'Flexion', 'Abduction', 'External Rotation', 'Internal Rotation', '']
     startVector = []
     endVector = []
 
     def set_state(self):
+        '''Display the current state'''
         self.ids.step_label.text = self.state_list[self.state]
 
     def update_state(self, direction):
+        '''Update the state value'''
         if direction == 'next':
             self.state += 1
             self.ids.step_label.text = self.state_list[self.state]
@@ -107,6 +125,7 @@ class ScreenMeasure(Screen):
         self.update_navigation()
 
     def update_navigation(self):
+        '''Change screen according to current state'''
         self.ids.next.disabled = False
         self.ids.back.disabled = False
 
@@ -114,28 +133,35 @@ class ScreenMeasure(Screen):
             self.state = 1
             self.set_state()
             self.manager.current = 'Questions Screen'
+
         elif self.state == 1:
-            self.ids.back.text = 'Retour aux questions'   
+            self.ids.back.text = 'Retour aux questions'  
+
         elif self.state ==4:
             self.ids.next.text = 'Résultats'
+
             if self.ids.table.ids.flexion_left.text == '' or \
             self.ids.table.ids.flexion_right.text == '' or self.ids.table.ids.abduction_left.text == '' or\
              self.ids.table.ids.abduction_right.text == '' or self.ids.table.ids.ext_rot_left.text == '' or\
               self.ids.table.ids.ext_rot_right.text == '' or self.ids.table.ids.int_rot_left.text == '' or\
                self.ids.table.ids.int_rot_right.text == '':
                 self.ids.next.disabled = True
+
         elif self.state == 5:
             self.state = 4
             self.set_state()
             self.manager.current = 'Results Screen'
+
         else:
             self.ids.next.text = 'Suivant'
             self.ids.back.text = 'Précédent'
 
     def dismiss_popup(self):
+        '''Close the Popup'''
         self._popup.dismiss()
 
     def load(self, path, filename):
+        '''Load the file accoreding the path and filename'''
         stream = os.path.join(path, filename[0])
         self.startVector = self.getStartVector(stream)
         self.endVector = self.getEndVector(stream)
@@ -143,6 +169,7 @@ class ScreenMeasure(Screen):
         self.dismiss_popup()
 
     def show_load(self, direction):
+        '''Create the Popup'''
         self.direction = direction
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
         self._popup = Popup(title="Charger Fichier", content=content,
@@ -150,51 +177,64 @@ class ScreenMeasure(Screen):
         self._popup.open()
 
     def computeAngle(self,v1, v2):
+        '''Computation of the angle between 2 vectors'''
         angle = (180/np.pi)*np.arccos(sum(v1*v2)/(np.linalg.norm(v1)*np.linalg.norm(v2)))
         return int(round(angle,0))
 
     def getStartVector(self,fileLoc):
+        '''Extract a start vector over 2s of sample at 128 Hz'''
         data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
         startVector = data.iloc[0:128].median()
         return startVector
 
     def getEndVector(self,fileLoc):
+        '''Extract an end vector over 2s of sample at 128 Hz'''
         data = pd.read_csv(fileLoc, header = 4, skiprows = [6], usecols = [4,5,6])
         endVector = data.iloc[-256:].median()
         return endVector
     
     def display_angle_left(self, angle):
+        '''Display the left angle'''
         self.ids.angle_left.text = 'Angle Bras Gauche : ' + angle
 
     def display_angle_right(self, angle):
+        '''Display the right angle'''
         self.ids.angle_right.text = 'Angle Bras Droit: ' + angle
 
     def measure(self, direction):
+        '''Handle the computation and the display of the angles'''
         if direction == 'left':
             self.display_angle_left(str(self.computeAngle(self.startVector, self.endVector)) + '°')
             self.ids.overinput_left.disabled = False
+
         elif direction == 'right':
             self.display_angle_right(str(self.computeAngle(self.startVector, self.endVector)) + '°')
             self.ids.overinput_right.disabled = False
+
         else:
             self.ids.overinput_left.text = 'Erreur' 
             
         if self.ids.angle_left.text == 'Angle Bras Gauche : ' or self.ids.angle_right.text == 'Angle Bras Droit: ':
             self.ids.validate.disabled = True
+
         else:
             self.ids.validate.disabled = False
 
     def overwriteLeft(self):
+        '''Overwrite the left angle'''
         self.display_angle_left(self.ids.overinput_left.text + '°')
     
     def overwriteRight(self):
+        '''Overwrite the right angle'''
         self.display_angle_right(self.ids.overinput_right.text + '°')
         
     def cleaninput(self):
+        '''Clear the overinput texts'''
         self.ids.overinput_left.text = ''
         self.ids.overinput_right.text = ''      
 
     def validate(self):
+        '''Save the angles for one movement'''
         self.ids.validate.disabled = True
         self.ids.overinput_left.disabled = True
         self.ids.overinput_right.disabled = True
@@ -203,15 +243,19 @@ class ScreenMeasure(Screen):
         if self.state == 1:
             self.ids.table.ids.flexion_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.flexion_right.text = self.ids.angle_right.text[18:-1] + '°'
+
         elif self.state == 2:
             self.ids.table.ids.abduction_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.abduction_right.text = self.ids.angle_right.text[18:-1] + '°'
+
         elif self.state == 3:
             self.ids.table.ids.ext_rot_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.ext_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
+
         elif self.state == 4:
             self.ids.table.ids.int_rot_left.text = self.ids.angle_left.text[19:-1] + '°'
             self.ids.table.ids.int_rot_right.text = self.ids.angle_right.text[18:-1] + '°'
+
         else: 
             self.ids.angle_left.text = 'Erreur' 
 
@@ -222,21 +266,25 @@ class ScreenMeasure(Screen):
         self.cleaninput()
 
 class ScreenResult(Screen):
+    '''Class for the Results Screen'''
     pass
 
 class Manager(ScreenManager):
+    '''Class for the manager widget'''
     screen_patient = ObjectProperty(None)
     screen_questions = ObjectProperty(None)
     screen_measure = ObjectProperty(None)
     screen_result = ObjectProperty(None)
+    # Dataframe for the data output
     df_data = pd.DataFrame(index = ['Left Arm', 'Right Arm'], columns = ['Pain', 'Activity 1', \
         'Activity 2', 'Activity 3', 'Activity 4', 'Flexion', 'Abduction', 'External Rotation', \
         'Internal Rotation', 'ISOBEX', 'Score'])
-    df_patients = ''
-    df_consultations = ''
+    df_patients = '' # Patients Dataframe 
+    df_consultations = '' # Consultations Dataframe
 
 
     def set_store_questions(self):
+        '''Save Questions data'''
         self.df_data['Pain']['Left Arm'] = self.screen_questions.ids.list1_l.text
         self.df_data['Pain']['Right Arm'] = self.screen_questions.ids.list1_r.text
         self.df_data['Activity 1']['Left Arm'] = self.screen_questions.ids.list2_l.text
@@ -251,6 +299,7 @@ class Manager(ScreenManager):
         self.df_data['ISOBEX']['Right Arm'] = self.screen_questions.ids.iso_r.text
 
     def set_store_measures(self):
+        '''Save Measure data'''
         self.df_data['Flexion']['Left Arm'] = \
             self.screen_measure.ids.table.ids.flexion_left.text[:-1]
         self.df_data['Flexion']['Right Arm'] = \
@@ -269,10 +318,12 @@ class Manager(ScreenManager):
             self.screen_measure.ids.table.ids.int_rot_right.text[:-1]
     
     def set_store(self):
+        '''Save Questions and Measures data'''
         self.set_store_measures()
         self.set_store_questions()
 
     def get_store(self):
+        '''Retrieve angles data'''
         self.screen_result.ids.result.ids.flexion_left.text = \
             self.df_data['Flexion']['Left Arm']
         self.screen_result.ids.result.ids.flexion_right.text = \
@@ -292,6 +343,7 @@ class Manager(ScreenManager):
         self.score()
 
     def score(self):
+        '''Display of the scores and the difference''''
         score_left = self.get_score_questions ('Left')
         score_right = self.get_score_questions('Right')
         score_diff = abs(score_left - score_right)
@@ -303,6 +355,7 @@ class Manager(ScreenManager):
         self.screen_result.ids.diff.text = str(score_diff)
 
     def get_score_questions(self, side):
+        '''Computation of a score'''
         score = 0
         q = self.df_data['Pain'][side + ' Arm']
 
@@ -454,24 +507,30 @@ class Manager(ScreenManager):
         return score
 
     def save(self):
-        self.df_data.transpose(copy=True).to_csv('../Results/shoulderROM_score.csv')
+        '''Save the data in a csv file'''
+        self.df_data.transpose(copy=True).to_csv('../Results/shoulderROM_score.csv') # modify this path and filename according to preferences
 
     def set_patient(self, id):
+        '''Verify if the patient code exists'''
         return pd.Series(int(id)).isin(self.df_patients.index)
         
     def set_consultation(self, id, patient):
+        '''Verify if the consultation code is unique and add it to the database'''
         if self.set_patient(patient)[0] and (not pd.Series(int(id)).isin(self.df_consultations.index)[0]):
             self.df_consultations.loc[int(id)] = ['', '']
             list_consult = self.df_patients.loc[int(patient), 'consultation_list']
             list_consult.add(int(id))
             self.df_patients.loc[int(patient), 'consultation_list'] =  list_consult
             return True
+
         else:
             return False
 
 
 class ShoulderTestApp(App):
+    '''Class of the application'''
     def build(self):
+        '''Build the application'''
         #### Temporary solution : custom Pandas dataframes
         m = Manager()
         df_patients = pd.DataFrame(

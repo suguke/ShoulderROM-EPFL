@@ -1,5 +1,7 @@
 #:kivy 1.10.0
 
+# Layout for the Results Screen
+
 <ScreenResult>:
     BoxLayout:
         orientation: 'vertical'
@@ -73,7 +75,7 @@
 
                 Button:
                     size_hint: None, 1
-                    width: root.ids.back.width
+                    width: back.width
                     text: 'Sauvegarder'
                     font_size: 25
-                    on_press: root.manager.save()
+                    on_press: root.manager.save() # Save data in csv file

@@ -1,5 +1,7 @@
 #:kivy 1.10.0
 
+# Layout for the Questions Screen
+
 <ScreenQuestions>:
     BoxLayout:
         orientation: 'vertical'
@@ -8,12 +10,17 @@
             size_hint: 1, 10
             pos_hint: {'center_x': .5, 'center_y': .5}
             do_default_tab: False
+
             TabbedPanelItem:
                 text: 'Douleurs'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if list1_l.text != 'Reponse' and list1_r.text != 'Reponse' else [1,1,1,1]
+                
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -24,25 +31,31 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+
                             Spinner:
                                 id: list1_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe')
                                 font_size: 25
+
                             Spinner:
                                 id: list1_r
                                 text: 'Reponse'
@@ -50,10 +63,14 @@
                                 font_size: 25
             TabbedPanelItem:
                 text: 'Activite 1'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if list2_l.text != 'Reponse' and list2_r.text != 'Reponse' else [1,1,1,1]
+                
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -64,36 +81,47 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+
                             Spinner:
                                 id: list2_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
                                 font_size: 25
+
                             Spinner:
                                 id: list2_r
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
                                 font_size: 25
+
             TabbedPanelItem:
                 text: 'Activite 2'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if list3_l.text != 'Reponse' and list3_r.text != 'Reponse' else [1,1,1,1]
+
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -104,36 +132,47 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+
                             Spinner:
                                 id: list3_l
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
                                 font_size: 25
+
                             Spinner:
                                 id: list3_r
                                 text: 'Reponse'
                                 values: ('Aucune', 'Legere', 'Moderee', 'Severe', 'Impossible')
                                 font_size: 25
+
             TabbedPanelItem:
                 text: 'Activite 3'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if list4_l.text != 'Reponse' and list4_r.text != 'Reponse' else [1,1,1,1]
+
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -144,36 +183,47 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+                            
                             Spinner:
                                 id: list4_l
                                 text: 'Reponse'
                                 values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
                                 font_size: 25
+
                             Spinner:
                                 id: list4_r
                                 text: 'Reponse'
                                 values: ('Jamais', 'Occasionnellement', 'Toutes les nuits')
                                 font_size: 25
+
             TabbedPanelItem:
                 text: 'Activite 4'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if list5_l.text != 'Reponse' and list5_r.text != 'Reponse' else [1,1,1,1]
+
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -184,36 +234,47 @@
                             font_color: [1, 1, 1, 1]
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+
                             Spinner:
                                 id: list5_l
                                 text: 'Reponse'
                                 values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
                                 font_size: 25
+
                             Spinner:
                                 id: list5_r
                                 text: 'Reponse'
                                 values: ('Au-dessus de la tete', 'Tete', 'Cou', 'Xiphoide', 'Taille')
                                 font_size: 25
+
             TabbedPanelItem:
                 text: 'ISOBEX'
+                # Green highlight if completed
                 background_color: [0,1,0,0.8] if iso_l.text != '' and iso_r.text != '' else [1,1,1,1]
+
                 BoxLayout:
                     orientation: 'vertical'
+
                     RelativeLayout:
+
                         TextInput:
                             size_hint: 1, 0.5
                             pos_hint: {'x': 0, 'y': 0.5}
@@ -223,20 +284,25 @@
                             readonly: True
                             background_color: [0, 0, 0, 0.5]
                             disabled_foreground_color: [1, 1, 1, 1]
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.5}
+
                             Label:
                                 text: 'Bras Gauche :'
                                 font_size: 25
+
                             Label:
                                 text: 'Bras Droit :'
                                 font_size: 25
+
                         BoxLayout:
                             orientation: 'horizontal'
                             size_hint: 1, 0.25
                             pos_hint: {'x': 0, 'y': 0.25}
+
                             TextInput:
                                 id: iso_l
                                 hint_text: 'Score ISOBEX, Bras gauche'
@@ -244,6 +310,7 @@
                                 input_filter: 'int'
                                 multiline: False
                                 font_size: 25
+
                             TextInput:
                                 id: iso_r
                                 hint_text: 'Score ISOBEX, Bras gauche'
@@ -251,6 +318,7 @@
                                 input_filter: 'int'
                                 multiline: False
                                 font_size: 25
+
         BoxLayout:
             orientation: 'horizontal'
 
@@ -277,4 +345,5 @@
                     text: 'Suite'
                     font_size: 25
                     on_press: root.validate()
+                    # Button active only if all questions have been answered.
                     disabled: False if (list1_l.text != 'Reponse' and list1_r.text != 'Reponse' and list2_l.text != 'Reponse' and list2_r.text != 'Reponse' and list3_l.text != 'Reponse' and list3_r.text != 'Reponse' and list4_l.text != 'Reponse' and list4_r.text != 'Reponse' and list5_l.text != 'Reponse' and list5_r.text != 'Reponse' and iso_l.text != '' and iso_r.text != '') else True

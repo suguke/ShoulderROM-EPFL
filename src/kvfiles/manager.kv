@@ -1,5 +1,7 @@
 #:kivy 1.10.0
 
+# Manager for the screens of the application
+
 <Manager>:
     id: screen_manager
 
@@ -17,16 +19,16 @@
         id: screen_questions
         name: 'Questions Screen'
         manager: screen_manager
-        on_pre_leave: root.set_store_questions()
+        on_pre_leave: root.set_store_questions() # store answers before leaving screen
 
     ScreenMeasure:
         id: screen_measure
         name: 'Measurement Screen'
         manager: screen_manager
-        on_pre_leave: root.set_store_measures()
+        on_pre_leave: root.set_store_measures() # store angles before leaving screen
 
     ScreenResult:
         id: screen_result
         name: 'Results Screen'
         manager: screen_manager
-        on_enter: root.get_store()
+        on_enter: root.get_store()  # display angles when entering the screen
