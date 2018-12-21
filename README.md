@@ -2,7 +2,7 @@
 EPFL - Biomechanics of the musculo-skeletal system project
 
 # Abstract
-
+This project sought to develop a tool to evaluate the range of motion of the shoulder, in the context of a consultation, based on inertial measurement units. Since shoulder problems represent a significant mass of hospital admissions, it is interesting to speed up consultations by improving the quality of angle measurements. The various constraints are an angle accuracy of less than 5°, ease of use through an interface, compatibility with the institution's databases and the possibility of outsourcing the system. This project achieved the precision objective with a maximum error of 1.51°. The implementation of a user-friendly and cross-platform application makes it easy to use during consultations as well as using the interface on various operating systems. Temporary solutions have been found to the various technical difficulties and perspectives are provided on the limitations of a system  based on inertial measurement units. In conclusion, this project proposes a promising pipeline application to integrate inertial measurement units into the clinical world.
 
 # Approach
 In order to automate the clinical examination of the shoulder, we developed a user-friendly application capable of bringing together all the necessary steps for the consultation. Python has proven to be the most suitable programming language for its rapid development, its numerous libraries and its dynamic community. The graphic user interface (GUI) is obtained thanks to the `Kivy` library. It is an open source and cross-platform library, ideal for using the application on different operating systems. 
